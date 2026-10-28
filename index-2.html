@@ -1,0 +1,1176 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0f766e">
+<title>المخزن الرئيسي للمستشفى</title>
+<style>
+:root{--bg:#f1f5f9;--card:#fff;--ink:#0f172a;--mut:#64748b;--line:#e2e8f0;--pri:#0f766e;
+--narc:#991b1b;--narct:#7f1d1d;--narcbg:#fef2f2;--warn:#b45309;--warnbg:#fffbeb;--ok:#15803d;--okbg:#f0fdf4;--bad:#b91c1c;--badbg:#fee2e2;--amber:#a16207;
+--pbok:#16a34a;--pblow:#f59e0b;--pbbad:#dc2626}
+:root[data-theme=dark]{--bg:#0b1220;--card:#131c2e;--ink:#e5edf7;--mut:#94a3b8;--line:#25314a;--narct:#fca5a5;--narcbg:#2b1114;--warn:#fbbf24;--warnbg:#2a2110;--ok:#4ade80;--okbg:#0f2a1a;--bad:#fca5a5;--badbg:#3a1518;--amber:#fcd34d}
+@media (prefers-color-scheme:dark){:root:not([data-theme]){--bg:#0b1220;--card:#131c2e;--ink:#e5edf7;--mut:#94a3b8;--line:#25314a;--narct:#fca5a5;--narcbg:#2b1114;--warn:#fbbf24;--warnbg:#2a2110;--ok:#4ade80;--okbg:#0f2a1a;--bad:#fca5a5;--badbg:#3a1518;--amber:#fcd34d}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic","Noto Sans Arabic",system-ui,-apple-system,Arial,sans-serif;font-size:15px;line-height:1.5}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:1280px;margin:0 auto;padding:0 14px}
+.top{background:linear-gradient(135deg,#0f766e,#134e4a);color:#fff;padding:14px 0 72px;margin-bottom:-58px}
+.hd{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+h1{font-size:19px;margin:0}
+.hd p{margin:3px 0 0;font-size:12px;opacity:.95;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.sy{border:0;background:rgba(255,255,255,.18);color:#fff;border-radius:999px;padding:2px 10px;font-size:12px;cursor:pointer}
+.hb{display:flex;gap:8px}
+.btn{border:1px solid var(--line);background:var(--card);padding:9px 14px;border-radius:10px;cursor:pointer;font-weight:600;position:relative}
+.btn.p{background:var(--pri);color:#fff;border-color:var(--pri)}
+.top .btn{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.28)}
+.top .btn.pri{background:#fff;color:#0f766e;border-color:#fff}
+.btn.dot::after{content:"";position:absolute;top:5px;left:5px;width:9px;height:9px;border-radius:50%;background:#f97316;border:2px solid #134e4a}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;text-align:right;cursor:pointer;display:grid;gap:1px;box-shadow:0 2px 6px rgba(15,23,42,.06)}
+.card b{font-size:28px;line-height:1.15}
+.card span{font-weight:700;font-size:13px}
+.card small{color:var(--mut);font-size:12px}
+.card.on{outline:2px solid var(--pri)}
+.card.narc{border-color:var(--narc);background:var(--narcbg)}.card.narc b,.card.narc span{color:var(--narct)}
+.card.warn b{color:var(--warn)}.card.amber b{color:var(--amber)}
+.narcp{margin:14px 0 4px;background:var(--narcbg);border:2px solid var(--narc);border-radius:14px;padding:12px}
+.narch{display:flex;gap:8px;align-items:center;flex-wrap:wrap;color:var(--narct);font-weight:800}
+.narch small{font-weight:500;color:var(--mut)}
+.narcg{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:10px}
+.nc{background:var(--card);border:1px solid var(--narc);border-radius:10px;padding:10px;display:grid;gap:4px}
+.nc.al{box-shadow:0 0 0 3px rgba(153,27,27,.28)}
+.nn{font-weight:800;color:var(--narct)}
+.nb{font-size:22px;font-weight:800}.nb small{font-size:12px;color:var(--mut);font-weight:500}
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0 6px;display:grid;gap:8px}
+.sq{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font-size:16px;background:var(--card)}
+.sq:focus,.fi:focus{outline:2px solid var(--pri);outline-offset:0}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.chip{white-space:nowrap;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer}
+.chip.on{background:var(--pri);color:#fff;border-color:var(--pri)}.chip.n.on{background:var(--narc);border-color:var(--narc)}
+.meta{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--mut);margin:4px 0 8px;gap:8px}
+.meta select{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:5px 8px;font-size:13px}
+.tbl{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:right;padding:10px 12px;font-size:12px;color:var(--mut);border-bottom:1px solid var(--line);white-space:nowrap;background:var(--card)}
+td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+.mut{color:var(--mut)}
+tr.narc{background:var(--narcbg)}
+tr.narc td:first-child{box-shadow:inset -6px 0 0 var(--narc)}
+.nmw{display:flex;gap:10px;align-items:center}
+.nt b{font-weight:700}
+tr.narc .nt b{color:var(--narct)}
+.th{width:46px;height:46px;border-radius:10px;object-fit:cover;background:var(--bg);border:1px solid var(--line);flex:none;cursor:zoom-in;display:block}
+.th.ph{display:grid;place-items:center;font-size:18px;color:var(--mut);cursor:pointer;padding:0}
+.th.sm{width:36px;height:36px}
+.th.lg{width:64px;height:64px}
+.mcode{display:none}
+.nxb{display:inline-block;background:var(--narc);color:#fff;font-size:11px;font-weight:800;padding:1px 8px;border-radius:6px;margin-inline-start:6px;animation:pl 2s infinite}
+@keyframes pl{50%{opacity:.7}}
+.bd{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11.5px;font-weight:700;white-space:nowrap;margin:1px 0}
+.bd.ok{background:var(--okbg);color:var(--ok)}.bd.low{background:var(--warnbg);color:var(--warn)}.bd.bad{background:var(--badbg);color:var(--bad)}
+.cap{white-space:nowrap}
+.capb{border:1px dashed var(--line);background:transparent;color:var(--mut);border-radius:8px;padding:3px 9px;font-size:12.5px;cursor:pointer}
+.bal{font-size:17px;font-weight:800}.bal.low{color:var(--warn)}.bal.bad{color:var(--bad)}
+.pb{position:relative;height:7px;border-radius:99px;background:var(--line);margin:4px 0 2px;min-width:96px;overflow:hidden}
+.pb i{position:absolute;top:0;bottom:0;inset-inline-start:0;border-radius:99px;background:var(--pbok)}
+.pb.low i{background:var(--pblow)}.pb.crit i,.pb.out i{background:var(--pbbad)}
+.pb u{position:absolute;top:0;bottom:0;width:2px;background:var(--ink);opacity:.4;text-decoration:none}
+.pbs{font-size:11.5px;color:var(--mut);display:block}
+.pbs.low{color:var(--warn);font-weight:700}.pbs.crit,.pbs.out{color:var(--bad);font-weight:700}
+.ac{white-space:nowrap}
+.mini{font-size:12.5px;font-weight:700;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:6px 10px;cursor:pointer}
+.mini.out{color:var(--bad);border-color:var(--bad)}.mini.in{color:var(--ok);border-color:var(--ok)}
+.empty{padding:36px;text-align:center;color:var(--mut)}
+#more{display:block;margin:12px auto 30px}
+dialog{border:0;border-radius:18px;padding:0;width:min(600px,100%);max-width:100%;background:var(--card);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(15,23,42,.55)}
+.in{padding:16px;max-height:92vh;overflow:auto;display:grid;gap:11px}
+.dh{display:flex;justify-content:space-between;align-items:center}
+.dh h2{margin:0;font-size:18px}
+.x{border:0;background:var(--bg);width:34px;height:34px;border-radius:50%;cursor:pointer}
+label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;color:var(--mut)}
+.fi{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font-size:16px;font-weight:400}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.seg button{padding:11px;border-radius:10px;border:1px solid var(--line);background:var(--bg);font-weight:700;cursor:pointer}
+.seg button.on.out{background:#b91c1c;color:#fff;border-color:#b91c1c}
+.seg button.on.in{background:#15803d;color:#fff;border-color:#15803d}
+#fM[data-t=out] .i{display:none}#fM[data-t=in] .o{display:none}
+.sug{display:none;border:1px solid var(--line);border-radius:10px;background:var(--card);max-height:230px;overflow:auto}
+.sug.show{display:block}
+.sug button{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;text-align:right;border:0;border-bottom:1px solid var(--line);background:transparent;padding:8px 12px;cursor:pointer}
+.sug button:last-child{border:0}
+.sug .nx{color:var(--narct);font-weight:800}
+.sel{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg);display:flex;gap:10px;align-items:flex-start}
+.sel.narc{background:var(--narcbg);border:2px solid var(--narc)}
+.sel .w{color:var(--narct);font-weight:800;margin-top:4px}
+.err{color:var(--bad);font-weight:700;font-size:13px}
+.acts{display:flex;gap:8px;justify-content:flex-end}
+.acts .btn{min-width:110px}
+.chk{flex-direction:row;align-items:center;gap:8px;color:var(--narct);font-weight:700}
+.chk input{width:20px;height:20px}
+.imgrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.lg{display:grid;grid-template-columns:auto 1fr auto;gap:10px;padding:10px;border:1px solid var(--line);border-radius:10px;align-items:start}
+.lg.nx{border-color:var(--narc);background:var(--narcbg)}
+.lt{font-size:12px;font-weight:800;padding:3px 9px;border-radius:8px}
+.lt.out{background:var(--badbg);color:var(--bad)}.lt.in{background:var(--okbg);color:var(--ok)}.lt.adj{background:var(--warnbg);color:var(--warn)}
+.ls{font-size:12.5px;color:var(--mut)}
+.lg time{font-size:11.5px;color:var(--mut);white-space:nowrap}
+.tools{display:grid;gap:8px}.tools .btn{text-align:right}
+.note{font-size:12.5px;color:var(--mut);background:var(--bg);border-radius:10px;padding:10px}
+.note ol{margin:6px 0 0;padding-inline-start:20px}
+.zin{padding:16px;display:grid;gap:10px;justify-items:center;text-align:center}
+.zin img{max-width:100%;max-height:60vh;border-radius:12px;object-fit:contain}
+.hb{flex-wrap:wrap}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.tab{white-space:nowrap;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:7px 13px;font-size:13px;cursor:pointer;font-weight:600}
+.tab.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.rb{display:grid;gap:12px;min-width:0}
+.rb h3{margin:6px 0 0;font-size:15px}
+.rctl{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.rctl label{flex-direction:row;align-items:center;gap:6px}
+.rctl select,.rctl input{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:7px 10px;font-size:14px}
+.sc{overflow-x:auto}
+.rt{width:100%;border-collapse:collapse;font-size:13px}
+.rt th{padding:7px 8px;font-size:12px}
+.rt td{padding:7px 8px;vertical-align:middle}
+.rt tr.nx td{background:var(--narcbg)}
+.rt input[type=number]{width:78px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:5px 6px;font-size:14px}
+.rt input[type=checkbox]{width:18px;height:18px}
+.dbr{display:grid;grid-template-columns:140px 1fr auto;gap:10px;align-items:center;font-size:13px}
+.kpi{display:flex;gap:10px;flex-wrap:wrap}
+.kpi>div{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:12.5px;color:var(--mut)}
+.kpi b{display:block;font-size:18px;color:var(--ink)}
+.hint{font-size:12.5px;color:var(--mut);background:var(--bg);border-radius:10px;padding:9px 11px}
+.hint.warn{background:var(--warnbg);color:var(--warn)}
+.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:34px;text-align:center;font-size:12px}
+#printArea{display:none}
+@media print{
+body.printing>*:not(#printArea){display:none!important}
+body.printing #printArea{display:block!important;color:#000;background:#fff;font-size:12px;direction:rtl}
+body.printing{background:#fff}
+#printArea h2{margin:0 0 4px}#printArea h3{margin:12px 0 4px}
+#printArea table{width:100%;border-collapse:collapse}
+#printArea th,#printArea td{border:1px solid #888;padding:4px 6px;text-align:right;background:#fff!important;color:#000!important}
+#printArea .noprint{display:none!important}
+#printArea .bd{border:1px solid #888;background:#fff;color:#000}
+@page{margin:12mm}
+}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;padding:10px 18px;border-radius:12px;font-weight:600;z-index:99;opacity:0;pointer-events:none;transition:.25s;max-width:92%}
+#toast.show{opacity:1}
+@media(max-width:820px){
+.stats{grid-template-columns:1fr 1fr}.card b{font-size:24px}
+.tbl{background:transparent;border:0;border-radius:0}
+.tbl table,.tbl tbody,.tbl tr,.tbl td{display:block}.tbl thead{display:none}
+.tbl tr{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;padding:12px;margin-bottom:10px;background:var(--card);border:1px solid var(--line);border-radius:14px}
+.tbl tr.narc{border:1px solid var(--narc);border-right:7px solid var(--narc);background:var(--narcbg)}
+.tbl tr.narc td:first-child{box-shadow:none}
+.tbl td{padding:0;border:0;display:flex;flex-direction:column;font-size:13.5px}
+.tbl td::before{content:attr(data-l);font-size:11px;color:var(--mut)}
+.tbl td.nm,.tbl td.cp,.tbl td.ac,.tbl td.stt,.tbl td.bl{grid-column:1/-1}
+.tbl td.nm{order:-3}.tbl td.nm::before,.tbl td.ac::before,.tbl td.stt::before{display:none}
+.tbl td.cd{display:none}.mcode{display:inline;color:var(--mut);font-size:12px}
+.tbl td.ac{flex-direction:row;gap:8px}.tbl td.ac .mini{flex:1;padding:9px}
+.dbr{grid-template-columns:100px 1fr auto}
+dialog{margin:auto 0 0;border-radius:18px 18px 0 0}
+.in{max-height:94vh}
+.top{padding-bottom:64px}
+}
+@media(max-width:380px){.g2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap hd">
+<div><h1>🏥 المخزن الرئيسي للمستشفى</h1><p><span id="today"></span><button class="sy" id="sync" type="button"></button></p></div>
+<div class="hb">
+<button class="btn pri" id="bNew">＋ حركة جديدة</button>
+<button class="btn" id="bRep">📊 التقارير</button>
+<button class="btn" id="bLog">📋 السجل</button>
+<button class="btn" id="bTheme" aria-label="الوضع الداكن / الفاتح">🌓</button>
+<button class="btn" id="bMore" aria-label="المزيد">⋯</button>
+</div></div></header>
+
+<main class="wrap">
+<section class="stats" id="stats"></section>
+<section class="narcp" id="narcP"></section>
+<div class="bar">
+<input class="sq" id="q" type="search" placeholder="🔍 ابحث بالاسم أو الكود..." autocomplete="off" inputmode="search">
+<div class="chips" id="chips">
+<button class="chip on" data-f="all">الكل</button>
+<button class="chip n" data-f="narc">🚨 المخدرة</button>
+<button class="chip" data-f="reorder">🛒 تحتاج إعادة طلب</button>
+<button class="chip" data-f="crit" id="chipCrit">🔴 عاجل</button>
+<button class="chip" data-f="out">نفد</button>
+<button class="chip" data-f="near">⏳ قريبة الانتهاء</button>
+</div></div>
+<div class="meta"><span id="count"></span>
+<select id="sort" aria-label="الترتيب"><option value="c">ترتيب: الكود</option><option value="n">ترتيب: الاسم</option><option value="p">ترتيب: الأقل نسبة متبقية</option><option value="b">ترتيب: الرصيد (الأقل أولاً)</option><option value="e">ترتيب: الأقرب انتهاءً</option></select></div>
+<div class="tbl"><table>
+<thead><tr><th>الكود</th><th>الصنف</th><th>سعة العلبة / محتوى الوحدة</th><th>الوحدة</th><th>الرصيد والنسبة المتبقية</th><th>حد الطلب</th><th>الرف</th><th>الانتهاء</th><th>الحالة</th><th></th></tr></thead>
+<tbody id="tb"></tbody></table></div>
+<button class="btn" id="more" hidden></button>
+</main>
+
+<!-- حركة جديدة -->
+<dialog id="dM"><form class="in" id="fM" data-t="out" autocomplete="off">
+<div class="dh"><h2>تسجيل حركة جديدة</h2><button type="button" class="x" data-close>✕</button></div>
+<div class="seg" id="seg"><button type="button" data-t="out" class="out on">📤 صرف لقسم</button><button type="button" data-t="in" class="in">📥 إضافة مخزون</button><button type="button" data-t="tpl">📋 صرف بقالب</button></div>
+<label>الصنف (بالاسم أو الكود)<input id="mItem" class="fi" placeholder="ابدأ الكتابة..." inputmode="search"></label>
+<div id="sug" class="sug"></div>
+<div id="mSel"></div>
+<div class="g2">
+<label>الكمية<input id="mQty" class="fi" type="number" inputmode="decimal" min="0" step="any"></label>
+<label>التاريخ والوقت<input id="mTime" class="fi" type="datetime-local"></label>
+</div>
+<label class="o">قسم الصرف<select id="mDept" class="fi"></select></label>
+<label class="o" id="lFloor" hidden>الدور / القسم الداخلي (اختياري)<input id="mFloor" class="fi" placeholder="مثال: الدور الثالث - باطنة"></label>
+<div class="g2">
+<label><span id="lWho">اسم المستلم</span><input id="mWho" class="fi" list="names"></label>
+<label><span id="lDoc">الطبيب المسؤول</span><input id="mDoc" class="fi" list="names"></label>
+</div>
+<div class="g2">
+<label class="i">المورد / مصدر التوريد<input id="mSup" class="fi"></label>
+<label class="i">تاريخ الانتهاء (اختياري)<input id="mExp" type="date" class="fi"></label>
+<label><span id="lRef">رقم المرجع (اختياري)</span><input id="mRef" class="fi"></label>
+<label>ملاحظات<input id="mNote" class="fi"></label>
+</div>
+<div id="mErr" class="err"></div>
+<div class="acts"><button class="btn" type="button" data-close>إلغاء</button><button class="btn p" type="submit">حفظ الحركة</button></div>
+</form></dialog>
+
+<!-- تعديل / صنف جديد -->
+<dialog id="dE"><form class="in" id="fE" autocomplete="off">
+<div class="dh"><h2 id="eH">تعديل الصنف</h2><button type="button" class="x" data-close>✕</button></div>
+<div class="g2">
+<label>الكود<input id="eC" class="fi" type="number" inputmode="numeric"></label>
+<label>السعر<input id="eP" class="fi" type="number" inputmode="decimal" step="any" min="0"></label>
+</div>
+<label>اسم الصنف<input id="eN" class="fi"></label>
+<label>رابط صورة الصنف (Image URL)<input id="eImg" class="fi" placeholder="https://...  أو رابط Google Drive" inputmode="url"></label>
+<div class="imgrow">
+<img id="ePrev" class="th lg" alt="" hidden>
+<button type="button" class="btn" id="eCam">📷 التقاط / رفع صورة</button>
+<button type="button" class="btn" id="eNoImg">إزالة الصورة</button>
+<input type="file" id="eFile" accept="image/*" hidden>
+</div>
+<div class="g2">
+<label>الوحدة<input id="eU" class="fi" placeholder="علبة / قطعة"></label>
+<label>الرف / المكان<input id="eSh" class="fi" placeholder="مثال: رف 3"></label>
+</div>
+<div class="g2">
+<label>سعة العلبة (العدد)<input id="eCq" class="fi" type="number" inputmode="decimal" step="any" min="0" placeholder="مثال: 10"></label>
+<label>محتوى الوحدة (النوع)<input id="eCu" class="fi" list="capunits" placeholder="أمبول / شريط / قرص..."></label>
+</div>
+<div class="g2">
+<label>حد الطلب<input id="eR" class="fi" type="number" inputmode="decimal" step="any" min="0"></label>
+<label>الحد الأقصى (لحساب النسبة %)<input id="eMx" class="fi" type="number" inputmode="decimal" step="any" min="0" placeholder="الكمية الكاملة المعتادة"></label>
+</div>
+<div class="g2">
+<label>الرصيد الحالي (جرد / تصحيح)<input id="eB" class="fi" type="number" inputmode="decimal" step="any" min="0"></label>
+<label>تاريخ الانتهاء<input id="eE" class="fi" type="date"></label>
+</div>
+<label class="chk"><input type="checkbox" id="eX"> 🚨 دواء مخدر (رعاية خاصة)</label>
+<div id="eErr" class="err"></div>
+<div class="acts"><button class="btn" type="button" data-close>إلغاء</button><button class="btn p" type="submit">حفظ</button></div>
+</form></dialog>
+
+<!-- السجل -->
+<dialog id="dL"><div class="in">
+<div class="dh"><h2>📋 سجل الحركات</h2><button type="button" class="x" data-close>✕</button></div>
+<input class="fi" id="lq" type="search" placeholder="بحث في السجل (صنف، مستلم، طبيب، رقم...)">
+<div class="g2"><select class="fi" id="lt"><option value="">كل الأنواع</option><option value="out">صرف</option><option value="in">إضافة</option><option value="adj">جرد / تعديل</option><option value="nx">المخدرة فقط</option></select><select class="fi" id="ld"></select></div>
+<div id="lList" style="display:grid;gap:8px"></div>
+</div></dialog>
+
+<!-- الربط والتنبيهات -->
+<dialog id="dS"><div class="in">
+<div class="dh"><h2>🔗 الربط مع Google Sheets والتنبيهات</h2><button type="button" class="x" data-close>✕</button></div>
+<label>رابط Web App (ينتهي بـ /exec)<input id="sUrl" class="fi" placeholder="https://script.google.com/macros/s/.../exec" inputmode="url"></label>
+<label>الرمز السري (نفس TOKEN في Code.gs)<input id="sTok" class="fi" autocomplete="off"></label>
+<div class="g2">
+<label>حد التنبيه العاجل (%)<input id="sCrit" class="fi" type="number" min="1" max="99"></label>
+<label>حد التنبيه التحذيري (%)<input id="sWarn" class="fi" type="number" min="1" max="99"></label>
+</div>
+<div class="g2">
+<label>مدة التوريد المعتادة (يوم)<input id="sLead" class="fi" type="number" min="1" max="120"></label>
+<label>تغطية المخزون المطلوبة (يوم)<input id="sCover" class="fi" type="number" min="1" max="365"></label>
+</div>
+<div id="sNote" class="note"></div>
+<div class="acts" style="flex-wrap:wrap"><button class="btn" type="button" id="sUp">⬆️ رفع الأصناف الحالية للشيت</button><button class="btn p" type="button" id="sSave">حفظ واختبار الاتصال</button></div>
+<div class="note"><b>طريقة الربط:</b>
+<ol><li>افتح Google Sheet جديد ← الإضافات (Extensions) ← Apps Script، والصق ملف <b>Code.gs</b>.</li>
+<li>غيّر <b>TOKEN</b> ثم Deploy ← New deployment ← Web app ← Execute as: <b>Me</b> ← Who has access: <b>Anyone</b>.</li>
+<li>انسخ الرابط والصقه هنا مع نفس الرمز السري، واضغط "حفظ واختبار الاتصال".</li>
+<li>أول مرة: اضغط "رفع الأصناف الحالية للشيت" لتعبئة الشيت بالـ770 صنف.</li></ol>
+بعد أي تعديل في Code.gs لازم Deploy ← Manage deployments ← New version.</div>
+<div class="note">النسب: عند انخفاض الرصيد عن حد التنبيه العاجل يظهر "إعادة طلب عاجل"، وعن التحذيري يظهر "جهّز طلب". النسبة محسوبة من الحد الأقصى للصنف، وإن لم يُحدد فمن أعلى رصيد وصل إليه الصنف.</div>
+</div></dialog>
+
+<!-- أدوات -->
+<dialog id="dT"><div class="in">
+<div class="dh"><h2>⚙️ أدوات</h2><button type="button" class="x" data-close>✕</button></div>
+<div class="tools">
+<button class="btn" id="tSet">🔗 ربط Google Sheets / نسب التنبيه</button>
+<button class="btn" id="tNew">➕ إضافة صنف جديد</button>
+<button class="btn" id="tExpI">⬇️ تصدير المخزون (CSV / إكسيل)</button>
+<button class="btn" id="tExpL">⬇️ تصدير سجل الحركات (CSV / إكسيل)</button>
+<button class="btn" id="tBk">💾 نسخة احتياطية كاملة (JSON)</button>
+<button class="btn" id="tRs">📂 استرجاع نسخة احتياطية (الوضع المحلي)</button>
+<input type="file" id="fRs" accept=".json,application/json" hidden>
+<button class="btn" id="tReset" style="color:var(--bad)">♻️ مسح الحركات والعودة لبيانات الإكسيل الأصلية (الوضع المحلي)</button>
+</div>
+<div class="note" id="bkNote"></div>
+<div class="note" id="modeNote"></div>
+</div></dialog>
+
+<!-- التقارير -->
+<dialog id="dR" style="width:min(980px,100%)"><div class="in">
+<div class="dh"><h2>📊 التقارير</h2><button type="button" class="x" data-close>✕</button></div>
+<div class="tabs" id="rTabs">
+<button class="tab on" data-rt="cons">استهلاك الأقسام</button>
+<button class="tab" data-rt="po">🛒 طلب الشراء</button>
+<button class="tab" data-rt="narc">🚨 كشف المخدرات</button>
+<button class="tab" data-rt="stale">راكد / قريب الانتهاء</button>
+<button class="tab" data-rt="anom">🔍 مراجعة الصرف</button>
+</div>
+<div id="rBody" class="rb"></div>
+<div class="acts"><button class="btn" id="rPrint">🖨️ طباعة / حفظ PDF</button></div>
+</div></dialog>
+
+<!-- صرف بقالب -->
+<dialog id="dK" style="width:min(680px,100%)"><form class="in" id="fK" autocomplete="off">
+<div class="dh"><h2>📋 صرف بقالب جاهز</h2><button type="button" class="x" data-close>✕</button></div>
+<label>القالب<select id="kTpl" class="fi"></select></label>
+<label>قسم الصرف<select id="kDept" class="fi"></select></label>
+<label id="kFloorL" hidden>الدور / القسم الداخلي (اختياري)<input id="kFloor" class="fi" placeholder="مثال: الدور الثالث - باطنة"></label>
+<div class="g2">
+<label>اسم المستلم<input id="kWho" class="fi" list="names"></label>
+<label>الطبيب المسؤول<input id="kDoc" class="fi" list="names"></label>
+</div>
+<div class="g2">
+<label>التاريخ والوقت<input id="kTime" type="datetime-local" class="fi"></label>
+<label>ملاحظات<input id="kNote" class="fi"></label>
+</div>
+<div id="kLines" class="sc"></div>
+<div id="kErr" class="err"></div>
+<div class="acts"><button type="button" class="btn" id="kMgr">⚙️ إدارة القوالب</button><button class="btn p" type="submit">صرف الكل</button></div>
+</form></dialog>
+
+<!-- إدارة القوالب -->
+<dialog id="dQ"><div class="in">
+<div class="dh"><h2>⚙️ قوالب الصرف</h2><button type="button" class="x" data-close>✕</button></div>
+<div id="qList" style="display:grid;gap:8px"></div>
+<div id="qEd" hidden style="display:grid;gap:10px">
+<label>اسم القالب<input id="qName" class="fi" placeholder="مثال: ولادة قيصرية"></label>
+<label>إضافة صنف للقالب<input id="qItem" class="fi" placeholder="ابحث بالاسم أو الكود" inputmode="search"></label>
+<div id="qSug" class="sug"></div>
+<div id="qLines" class="sc"></div>
+<div id="qErr" class="err"></div>
+<div class="acts"><button type="button" class="btn" id="qBack">رجوع</button><button type="button" class="btn p" id="qSave">حفظ القالب</button></div>
+</div>
+</div></dialog>
+
+<!-- معاينة صورة -->
+<dialog id="dZ" style="width:min(460px,100%)"><div class="zin">
+<img id="zImg" alt="">
+<b id="zCap"></b>
+<div class="acts"><button class="btn" type="button" data-close>إغلاق</button><button class="btn p" type="button" id="zEdit">تعديل الصنف</button></div>
+</div></dialog>
+
+<datalist id="names"></datalist>
+<datalist id="capunits"><option value="أمبول"><option value="فيال"><option value="شريط"><option value="قرص"><option value="كبسولة"><option value="قطعة"><option value="زجاجة"><option value="كيس"><option value="رول"><option value="متر"><option value="مل"><option value="جم"><option value="لتر"></datalist>
+<div id="toast"></div>
+<div id="printArea"></div>
+<noscript>يلزم تفعيل JavaScript لتشغيل النظام.</noscript>
+
+<script>
+/* ===================== إعدادات يمكنك تعديلها هنا ===================== */
+const GAS_URL   = "";   // ← ضع هنا رابط Google Apps Script Web App (ينتهي بـ /exec)
+const GAS_TOKEN = "";   // ← الرمز السري (نفس TOKEN الموجود في Code.gs)
+const DEPTS = ['العمليات','الأشعة','العيادات الخارجية','الرعاية المركزة','الأقسام الداخلية / الدور'];
+const FLOOR_DEPT = 4;   // رقم القسم (من 0) الذي يطلب تحديد الدور
+const NEAR = 90;        // عدد الأيام لاعتبار الصنف "قريب الانتهاء"
+const PAGE = 60;        // عدد الأصناف المعروضة في كل دفعة
+/* ===================================================================== */
+// بيانات الإكسيل: [كود, اسم, سعر, رف, وحدة, سعة, رصيد, حد الطلب, مخدر, انتهاء]
+const SEED=[[1000,"فكريل 2 راوند",53.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1001,"فكريل 2 قاطع",53.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1002,"فكريل 1 راوند",57.91,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1003,"فكريل 1 قاطع",53.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1004,"فكريل 0 راوند",53.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1005,"فكريل 0 قاطع",53.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1006,"فكريل 2/0 راوند",53.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1007,"فكريل 2/0 قاطع",53.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1008,"فكريل 3/0 راوند",53.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1009,"فكريل 3/0 قاطع",53.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1010,"فكريل 4/0 راوند",53.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1011,"فكريل 4/0 قاطع",53.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1012,"فكريل 5/0 راوند",53.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1013,"فكريل 5/0 قاطع",53.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1014,"برولين 1 راوند",32.91,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1015,"برولين 1 قاطع",32.91,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1016,"برولين 0 راوند",32.91,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1017,"برولين 0 قاطع",32.91,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1018,"برولين 2/0 راوند",32.91,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1019,"برولين 2/0 قاطع",32.91,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1020,"برولين 2/0 استريت",32.91,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1021,"برولين 3/0 راوند",32.91,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1022,"برولين 3/0 قاطع",32.91,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1023,"برولين 3/0 استريت",32.91,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1024,"برولين 4/0 راوند",32.91,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1025,"برولين 4/0 قاطع",32.91,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1026,"برولين 5/0 راوند",32.91,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1027,"برولين 5/0 قاطع",32.91,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1028,"برولين 6/0 راوند",32.91,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1029,"برولين 6/0 قاطع",32.91,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1030,"برولين 6/0 ابرتين",70.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1031,"حرير 1 قاطع",27.91,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1032,"حرير 1 ربط",52.91,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1033,"حرير 0 قاطع",27.91,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1034,"حرير 2/0 قاطع",27.91,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1035,"رايل اخضر م6",4.15,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1036,"رايل ازرق م8",4.15,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1037,"رايل اسود م10",4.15,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1038,"رايل ابيض م12",4.15,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1039,"رايل اخضر م14",4.15,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1040,"رايل برتقالي م16",4.15,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1041,"رايل احمر م18",4.15,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1042,"رايل اصفر م20",4.15,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1043,"نيلتون م 6اخضر فاتح",4.15,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1044,"نيلتون م 8ازرق غامق",4.15,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1045,"نيلتون م 10اسود",4.15,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1046,"نيلتون م 12ابيض",4.15,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1047,"نيلتون م 14اخضر غامق",4.15,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1048,"نيلتون م 16برتقالى",4.15,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1049,"نيلتون م 18احمر",4.15,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1050,"نيلتون م 20اصفر",4.15,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1051,"نيلتون م 22موف",4.15,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1052,"نيلتون م 24ازرق فاتح",4.15,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1053,"فولى م 6",26.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1054,"فولى م 8",26.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1055,"فولى م 10",26.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1056,"فولى م 12",26.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1057,"فولى م 14",26.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1058,"فولى م 16",26.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1059,"فولى م 18",26.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1060,"فولى م 20",26.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1061,"فولى م 22",26.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1062,"سيلكون 2 شعبه م 14",75.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1063,"سيلكون 2 شعبه م 16",75.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1064,"سيلكون 2 شعبه م 18",75.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1065,"سيلكون 2 شعبه م 20",75.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1066,"سيلكون 2 شعبه م 22",75.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1067,"سيلكون 3 شعبه م 20",165.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1068,"نيزل حديثي الولاده",8.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1069,"نيزل اطفال",8.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1070,"نيزل كبار",8.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1071,"ماسك اكسجين اطفال",11.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1072,"ماسك اكسجين كبار",11.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1073,"ماسك بخار اطفال",12.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1074,"ماسك بخار كبار",12.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1075,"غطاء راس مريض - بونية",0.45,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1076,"غطاء راس طبيب",0.95,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1079,"ماكينتوش",3.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1080,"مفرش سرير 90*60",15.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1081,"مفرش سرير 90*180",10.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1082,"ترمومتر زئبقي",17.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1083,"بيتادين جراحى10%(1سم)",0.22,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1084,"بيتادين تعقيم7.5% (1سم)",0.35,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1085,"فورمالين",100.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1086,"سايدكس جيركن",220.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1088,"استرليم سائل",0.085,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1089,"كحول70%",24.25,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1090,"جاون مريض كبار",8.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1091,"جاون طبيب",14.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1092,"ملايه شق",15.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1093,"فوط فنيك",4.25,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1094,"كيس ترابيزه",8.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1095,"جاون مريض اطفال",5.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1096,"باكت فرش صغير",85.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1098,"قطن 100جم",7.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1099,"قطن 500جم",45.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1100,"قطن 250جم",25.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1101,"دباسه جلد",180.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1102,"بون واكس",96.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1103,"سيرج سيل",220.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1104,"جيل فوم",120.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1105,"نايلون تيب",250.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1106,"ايثيبوند 5",167.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1107,"سرنجات انسولين",1.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1108,"سرنجات 3سم",1.25,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1109,"سرنجات 5سم",1.45,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1110,"سرنجات 10سم",2.15,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1111,"سرنجات 20سم",4.9,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1112,"سرنجات 50سم",8.25,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1113,"سرنجات رايل",8.25,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1114,"جهاز وريد",6.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1115,"جهاز نقل دم",13.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1117,"كانيولا موف",9.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1118,"كانيولا صفراء",7.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1119,"كانيولا زرقاء",6.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1120,"كانيولا بمبي",6.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1121,"كانيولا خضراء",6.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1122,"كانيولا رمادى",8.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1123,"وصله وريديه",6.95,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1124,"وصله ثلاثيه",9.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1125,"ابره بنج رمادى",39.95,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1126,"ابره بنج برتقالي",39.95,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1127,"ابره بنج اسود",39.95,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1128,"ابيديورال",900.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1129,"اطفال cvp",450.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1130,"كبار cvp",650.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1131,"مشارط م 11",2.25,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1133,"مشارط م 20",2.25,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1134,"حشو انف 80مم",19.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1135,"حشو انف 100مم",19.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1144,"جراب كاميرا",13.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1145,"وصله مياه مناظير",18.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1146,"كيس جمع بول كبار",8.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1148,"قسطره كاندوم مقاسات",25.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1149,"جوانتيات م 8.5",11.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1150,"جوانتيات م 8",11.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1151,"جوانتيات م 7.5",11.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1152,"جوانتيات م 7",11.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1153,"جوانتيات لاتكس",1.55,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1154,"فوط بطن",9.85,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1155,"شاش 10*10 بمظهر بالشاشه",1.45,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1156,"شاش بدون مظهر",1.4,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1157,"شاش فزلين 10*10",0.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1158,"شاش فزلين 10*20",0.55,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1159,"سواب كحلى",45.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1160,"بلاستر حرير 10سم (متر)",11.7,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1161,"بلاستر حرير 5سم (متر)",12.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1162,"سترى باد م 6*8",0.74,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1163,"سترى باد م 10*18",2.35,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1164,"سترى باد م 10*25",2.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1165,"اوب سايد 45*55",95.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1166,"سترى استربس 6*38",55.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1167,"بلاستر ضاغط",85.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1168,"سفتى بوكس",20.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1169,"رول م 5سم",250.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1170,"رول م 10سم",510.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1171,"رول م 7.5",375.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1172,"رول م 15سم",760.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1173,"رول م20سم",1000.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1174,"رول م 25سم",1250.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1175,"رول م 30سم",1500.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1176,"تيب تعقيم",54.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1183,"صبغه omnipaque تركيز 350",15.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1184,"صبغه telebrix",15.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1185,"جوانتى فحص بلاستيك",6.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1186,"كريم رسم مخ ten20",285.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1189,"لولب نحاسى",30.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1190,"بكر رسم قلب",19.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1196,"جيل سونارجركن",37.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1197,"جيل انبوبه k.way",9.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1202,"ريدى فاك م 12",72.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1203,"ريدى فاك م 14",72.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1204,"ريدى فاك م 16",72.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1205,"ريدى فاك م 18",72.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1206,"ممر هوائي ازرق",4.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1207,"ممر هوائي اسود",4.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1208,"ممر هوائي ابيض",4.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1209,"ممر هوائى اخضر",4.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1210,"ممر هوائي برتقالي",4.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1211,"ممر هوائي احمر",4.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1212,"ممر هوائي اصفر",4.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1213,"تيوب كف م 8",33.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1214,"تيوب كف م 7.5",33.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1215,"تيوب كف م7",33.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1216,"تيوب كف م 6.5",33.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1217,"تيوب كف م 6",33.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1218,"تيوب كف م 5.5",33.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1219,"تيوب كف م5",33.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1220,"تيوب كف م 4.5",33.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1221,"تيوب كف م 4",33.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1222,"تيوب كف م 3.5",33.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1223,"تيوب كف م 3",33.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1224,"تيوب كف م 2.5",33.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1225,"تيوب كف م 2",33.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1226,"تيوب بدون كف م 5.5",19.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1227,"تيوب بدون كف م 5",19.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1228,"تيوب بدون كف م4.5",19.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1229,"تيوب بدون كف م 4",19.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1230,"تيوب بدون كف م 3.5",19.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1231,"تيوب بدون كف م م 3",19.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1232,"تيوب بدون كف م 2.5",19.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1233,"تيوب بدون كف م 2",19.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1234,"شبكه برولين 6*11",250.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1235,"شبكه برولين 15*15",425.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1236,"شبكه برولين 30*30",950.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1237,"رباط شاش10سم",4.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1238,"رباط شاش 5سم",2.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1239,"رباط ضاغط م 8",13.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1240,"رباط ضاغط م 10",10.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1241,"رباط ضاغط م 15",12.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1242,"رباط ضاغط م 20",18.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1243,"جبسونا م 7.5",35.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1244,"جبسونا م 10",34.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1245,"جبسونا م 15",44.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1246,"جبسونا م 20",50.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1247,"سوفت باند م 7.5",3.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1248,"سوفت باند م 10",3.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1249,"سوفت باند م 15",4.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1250,"جبس ملون م 5",125.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1251,"جبس ملون م 4",120.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1252,"جبس ملون م 3",115.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1257,"اسوره بيبي",0.95,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1258,"اسوره كبار",0.95,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1259,"الكترود عمليات",1.9,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1260,"دعامه انف خارجيه",75.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1261,"دعامه انف داخليه",45.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1262,"خافض لسان",30.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1263,"لولب يو كير",125.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1264,"كابل دياثرمى",25.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1265,"عازل دياثرمى لاصق",25.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1266,"ماء اكسجين",6.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1267,"صبغه جاوا",27.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1268,"شرايط سكر direct (شريط)",5.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1269,"شكاكات سكر",30.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1272,"كحول رش",30.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1273,"كلبس سره",2.25,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1274,"ديبريفان امبول",74.8,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1275,"انترافال",51.4,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1276,"هيفى ماركين صنى",30.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1277,"ماركين 1سم",2.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1278,"كتالار 1سم",45.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1279,"دورميكم 15",95.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1280,"دورميكم 5مجم",30.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1281,"تريكيم 50مجم",28.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1282,"تريكيم 25مجم",25.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1283,"سكسنيل",40.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1284,"بروستجمين 1 سم",8.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1285,"سينتوسينون 5 مجم",13.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1286,"سينتوسينون 10 مجم",13.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1287,"ميثرجين",13.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1288,"افدرين",4.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1289,"اتروبين",3.6,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1290,"ادرينالين",16.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1291,"اندرال",14.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1293,"زيلوكين رش",38.7,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1294,"بابال",250.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1295,"هيبارين",45.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1296,"نالوفين",225.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1297,"كيتولاك",12.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1298,"فولتارين",8.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1301,"افيل",7.6,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1302,"بسكوبان",8.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1303,"بريمبران",2.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1304,"ديكسا ميثازون",9.3,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1305,"سوليو كورتيف",25.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1308,"لازكس",8.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1309,"هيموستوب",8.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1310,"دايسينون",8.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1311,"كابرون",11.7,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1313,"بوتاسيوم",10.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1319,"كوناكيون اطفال",14.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1320,"ماغنسيوم",15.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1321,"صوديوم بيكرب",50.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1322,"كالسيوم",30.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1323,"بيتافوس",31.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1324,"جراميسين 40مجم",3.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1325,"جراميسين 80مجم",15.7,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1326,"كوناكيون كبار",18.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1327,"سيفترياكسون 1جم",43.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1330,"هالوثان 1سم",11.55,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1331,"ايزوفلورين 1سم",5.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1332,"كريم لجنوكايين مرهم",22.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1333,"كريم تيراميسين",26.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1334,"كريم ديرمازين",110.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1335,"كريم فيوسيدين",56.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1336,"قطره اتروفين اطفال",24.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1337,"قطره اتروفين كبار",22.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1339,"ملح 500سم",17.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1340,"رينجر 500سم",17.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1341,"جلوكوز5%",19.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1342,"ملح لتر",30.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1343,"ماء مقطر لتر",120.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1344,"جلايسين لتر",120.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1347,"قطره فاركولين",25.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1348,"جلوكوز 10%",22.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1349,"جلوكوز 25%",25.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1351,"اتروفينت 250مجم",13.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1352,"دبيوتامين",20.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1353,"فنتانيل",15.6,"غير محدد","علبة / قطعة","غير مدخل",0,10,1,""],[1354,"دوبامين",20.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1359,"ليفوفرين",44.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1360,"ادولور",12.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1362,"مشارط 15",2.25,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1376,"مورفين",9.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,1,""],[1383,"فولفن",220.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1387,"بلمكورت",37.6,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1392,"كوب عينة",2.25,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1408,"اسلاك معدنيه",30.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1428,"تيوب + خرطوم Chest",285.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1445,"زيلوكين 1 سم",1.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1463,"ماسك طبيب",1.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1496,"pca-مقاس 275",495.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1501,"مونوكريل 2/0 قاطع",95.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1536,"زوفران 4مجم",32.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1537,"كنترلوك",146.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1559,"باكت فرش متوسط",110.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1586,"سيفوتاكسيم 1جم",29.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1605,"برفلجان",55.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1606,"سيفوفلورين 1سم",10.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1607,"نيترونال 1سم",1.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1608,"رابيد 0/4 قاطع",75.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1611,"مونوكؤيل 0/3 راوند",95.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1612,"مونوكريل 2/0 راوند",95.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1613,"رابيد 2/0 رواند",75.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1614,"رابيد 3/0 راوند",75.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1615,"PDS راوند 1",150.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1616,"خيط كروميك 0/4",30.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1617,"حزام صدر xl",100.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1618,"امريزول",30.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1619,"ميداثتك امبول 15",95.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1621,"هيدروكورتيزون",20.2,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1622,"ايتافلين",10.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1626,"الانتودين",13.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1634,"فكريل 6/0قطع",53.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1635,"سايدكس اكياس",28.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1636,"سيليكون م6 2ش",75.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1637,"سيليكون م6 3ش",165.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1638,"سيليكون م8-3ش",165.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1639,"سيليكون م10-3ش",165.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1640,"سيليكون م12-3ش",165.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1641,"رباط شاش 15سم",6.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1642,"جاستروتودين",16.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1643,"اوكسيتوفليكس",13.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1644,"خرطوم شيست",35.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1646,"صانيمترين",13.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1647,"جراميسين كريم",16.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1649,"بريزيديكس 5.سم",100.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1650,"ديرسنج 15*25",2.65,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1651,"ديرسنج 10*10",2.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1652,"رول م35",1750.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1653,"كلورال 5 سم",3.4,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1656,"ستري باد 10*35",2.98,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1657,"فكريل 6/0راوند",53.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1658,"pdS راوند 3/0",165.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1659,"pdS راوند 5/0",165.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1660,"ايثيبوند 2",146.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1661,"ايثيبوند 2/0",150.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1664,"سيليكون 2شعبه م8",75.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1665,"سيليكون 2شعبه م10",75.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1666,"سيليكون 2شعبه م12",75.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1667,"سيليكون 3شعبه م18",165.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1668,"سيليكون 3شعبه م22",165.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1669,"لولب سيلفر",320.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1670,"هيفى ماركين استرا",50.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1671,"فيسرالجين",15.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1672,"هستريل",220.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1673,"انسولين مائى",75.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1674,"بريزولين قطره",25.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1679,"سرنجه مقطعيه انجكتور",450.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1680,"كانيولا برتقالي",12.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1681,"ميداثتك امبول 5 مم",30.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1682,"وصلة شريانية",6.95,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1683,"دانست 4",22.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1684,"امري k",5.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1685,"كيس ايمدج",8.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1686,"اترابسيلات 50 مجم",40.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1687,"راوند 0/2 pds",165.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1688,"فوط سكوتش",5.25,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1689,"صبغة مجنافيست 1 سم",35.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1690,"بثدين 50مجم",7.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,1,""],[1691,"امادول",8.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1694,"طقم سرير",16.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1695,"حفاضة كبار السن",13.9,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1697,"سيزاتراكوريوم - هاملين 2مجم/م",40.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1698,"كلكسان 40",311.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1700,"دانست 8",38.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1701,"حزام صدر l",100.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1702,"حزام صدر m",100.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1703,"الترا تشك",8.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1704,"جلوكو دكتور",10.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1705,"كير سينس",5.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1706,"فانكوميسين 1 جم",125.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1707,"زوفران 8مجم",52.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1708,"سيليكون م14-3ش",165.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1709,"سيليكون م16-3ش",165.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1710,"حرير 2/0 ربط",45.73,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1711,"الكترود اشعه",2.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1712,"نيترو ديرم 5",10.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1713,"نيترو ديرم 10",20.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1714,"فلانشه",225.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1715,"ديرسنج 10*20",2.25,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1716,"استرى استربس 6*100",55.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1717,"لاصقه مستديره",45.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1718,"استرليم جيل",350.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1719,"ديبريفان فيال",74.8,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1720,"فوار فروت",10.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1721,"كاندوم",25.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1722,"ابرة حقن عصب",220.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1723,"ابرة حقن قضيب",100.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1724,"صبغة شرب 20سم",15.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1725,"مانيتول",20.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1726,"الباريوم",300.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1727,"1",null,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1728,"مفرش سرير رول",122.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1729,"برولين 0/4 راوند ابرتين",83.16,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1730,"برولين 0/5 راوند ابرتين",120.83,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1731,"ازميرون",67.2,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1732,"بريديون",588.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1733,"ورق ابيض A4 - 500 ورقه",150.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1734,"ليتر هد 120 جم 500 ورقة",550.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1735,"ليتر هد 80 جم - 1000 ورقة",550.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1736,"ورق جلوسي A4",4.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1737,"ورق جلوسي A3",5.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1738,"ورق جلوسي A6",1.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1739,"علبة افلام سيرمال كبيرة",5250.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1740,"علبه افلام سيرمال وسط",3250.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1741,"علبة افلام سيرمال صغير",1850.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1742,"كراسة عمليات",9.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1743,"شيت مستهلكات عمليات",80.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1744,"دفتر تسجيل الحالات",100.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1745,"اخطار ولادة",40.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1746,"دفتر نفايات",80.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1747,"كشف حساب",35.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1748,"شيت شكوي",40.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1749,"دفتر اذن صرف",40.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1750,"ريكوست اسنان",30.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1751,"شيت متابعة مريض اسنان",2.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1752,"روشيته هيلث",38.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1753,"روشته د احمد المليجي",80.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1754,"روشته د احمد البحيري",80.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1755,"روشتية د محمود شاهين",80.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1756,"روشتية د محمود زيدان",80.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1757,"روشتية د عبدالرحمن كمال",80.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1758,"روشيتة د محمد حلمي",80.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1759,"روشيتة د مروة ابورواش",80.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1760,"كراسة شرح التجميل النسائي",15.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1761,"شيت متابعة حمل",2.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1762,"احبار A4",550.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1763,"فايل شباك 100 ق",450.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1764,"فايل بدون شباك 100 ق",450.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1765,"ظرف كبير 1ق",13.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1766,"ظرف وسط 100ق",810.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1767,"ظرف صغير 100 ق",415.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1768,"ظرف اسنان 100ق",200.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1769,"ظرف اسطوانة 100 ق",200.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1770,"صبغه omnipaque تركيز 300",13.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1771,"دفتر تذكرة صرف مخدرات",25.49,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1772,"ليتر هد 100 جم 500 ورقة",300.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1773,"ميزوتاك القرص",1.92,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1774,"انبوبة شق حنجرية",300.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1775,"جلسرين مانيزيا",14.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1776,"ريكوست تسويق الوان 100 جرام",24.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1777,"صبغه اومنيباك 1 سم",15.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1778,"بريدو كايين",15.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1779,"اللترا فيست مقطعيه تركيز 370/ 1سم",6.97,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1780,"اللترا فيست مقطعيه تركيز 300 / 1سم",6.15,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1781,"زنتكس مقطعية تركيز 350/ 1سم",12.8,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1782,"جادو فيست رنين / 1سم",77.06,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1783,"رجاجه مياه معدنية 1.5 لتر",7.95,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1784,"زنتكس مقطعية تركيز 300/ 1سم",13.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1785,"ابره سحب عينه",350.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1786,"بريزدكس مخفف 1 سم",4.4,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1787,"باكت فرش كبير",150.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1788,"روشتة د محمد حواس",120.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1789,"برولين 0/7 ابرتين",291.6,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1790,"كريم كيناكوم",null,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1791,"غطاء قدم",1.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1792,"امبوباج",265.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1793,"ماهوكر",635.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1794,"ماسك اكسجين بالباج",35.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1795,"تى تيوب صاروخ",15.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1796,"وريد الترا مميز",7.25,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1797,"وصله تنفس كبار",85.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1798,"مسطره cvp",35.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1799,"مشرط 21",1.85,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1800,"مشرط 22",1.85,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1801,"مشرط 23",1.85,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1802,"مشرط 24",1.85,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1803,"مرسلين نيلون تيب",170.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1804,"ميراج1جم",145.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1805,"تيراتام",35.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1806,"فينيتين",16.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1807,"بيكوزيم",10.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1808,"فورتامايند",29.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1809,"زينك اوليف",95.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1810,"بيفاتراسين",83.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1811,"كلكسان 40",155.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1812,"كلكسان 60",183.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1813,"كلكسان 80",208.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1814,"اسبوسيد",11.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1815,"بلفكس",155.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1816,"نورفاسك",32.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1817,"كونكور 2.50",20.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1818,"كونكور 5",24.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1819,"كيتوستريل",195.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1820,"كالسيمات",10.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1821,"كونترلوك",59.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1822,"هيبارين",45.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1823,"فيبوريك 40ملجم",76.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1824,"بونى كير",43.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1825,"كريستور",92.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1826,"انسولين اكت رابيد",1.3,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1827,"كيدمين 250ملى",138.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1828,"زوركسون 1جم",56.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1829,"سيفترياكسون 1جم",95.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1830,"نيفيلوب 2.50 شريط",23.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1831,"كابوتبين25 شريط",13.4,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1832,"ابيسفين 2جم",77.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1833,"اتور 40ملجم شريط",106.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1834,"اسبرين شريط",26.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1835,"بلمكورت",35.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1836,"اتروفنت",6.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1837,"كيدمين",138.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1838,"هيبارين",38.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1839,"وصله تخدير اطفال احادى",225.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1840,"وصله تخدير اطفال ثنائى",175.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1841,"قلم لانتوس",248.8,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1842,"ستربتوكين",23.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1843,"لوبرانيست",4.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1844,"باراسيتامول فيال",67.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1845,"اكساميد",22.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1846,"ابيرسول انبوبه",109.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1847,"دفلاك زجاجه",143.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1848,"ابيسفين 1جم",60.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1849,"ميكوناز جيل",23.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1850,"جاستروبيوتك",172.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1851,"هيكستول",49.4,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1852,"امينوليبان",183.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1853,"ستيمولان",48.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1854,"دالاسين",114.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1855,"كورادرون",150.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1856,"داى فلو كيو",26.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1857,"بوجى",290.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1858,"سالوست الترا",35.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1859,"ماسك سباب",1450.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1860,"هاى فريش قطره",75.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1861,"فلاجيل فيال",26.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1862,"ديفلوكان",140.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1863,"فلوميسيل",52.4,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1864,"ادولور 30امبول",12.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1865,"جاراميسين امبول",20.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1866,"سيبرولايسين امبول",178.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1867,"لوسترال 50شريط",68.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1868,"اتوريزا 10/20 جم شريط",47.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1869,"بون كير .5 جم شريط",43.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1870,"بى كاميرز زجاجه",500.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1871,"اوبلكس n",31.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1872,"كيتابكس 25 مجم",29.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1873,"سريبروستام 1جم امبول",10.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1874,"مليجا 40 شريط",27.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1875,"تافانيك فيال",305.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1876,"اوميز 40مجم فيال",66.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1877,"سيفوتاكس.1 جم",48.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1878,"فورتام 1جم",106.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1879,"فورتام 500جم",66.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1880,"اورسوبلس",87.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1881,"سبيكتون100 شريط",10.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1882,"ملح3%",30.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1883,"لينزوليد600",126.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1884,"كرديكسين",10.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1885,"كورادرون شريط",34.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1886,"فانكومايسين500",142.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1887,"اليكوس2.5 شريط",266.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1888,"مونوريل 3ملى",293.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1889,"تارجوسيد 200",408.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1890,"كورتيلون شريط",8.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1891,"كلاسيد شريط",146.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1892,"سيبروفلوكساسين",52.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1893,"تارج80",74.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1894,"ماسك ريزفور",35.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1895,"سولو بريد 20 مجم",71.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1896,"دلتا فيت",75.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1897,"اتور 20",79.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1898,"فورتيموكس بلس قطره",39.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1899,"فورتيموكس قطره",62.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1900,"استيل سيستايين 600 اكياس",7.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1901,"جاست ريج",24.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1902,"توبرين مرهم",23.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1903,"لبوس جلسرين",12.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1904,"بيكاميرز شريط",27.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1905,"فيفند شريط",4190.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1906,"فيفند فيال",1420.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1907,"اسيكلوفير 400 شريط",30.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1908,"تار جوسيد 200",408.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1909,"تار جوسيد 400",528.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1910,"ميميكسا ( الزميندا ) شريط",25.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1911,"سبازموفين",13.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1912,"سبازمو فري ( فيسرا )",18.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1913,"دنتريلكس شريط",51.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1914,"انجيكتافير",1750.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1915,"كالسيتونيوم",31.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1916,"سيدونيز",1442.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1917,"البومين",1450.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1918,"سوفينازين 5 مجم",47.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1919,"نيو - ميون",1123.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1920,"يونكتام 1.5 جم",56.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1921,"شراب دوالي صغير",450.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1922,"شراب دوالي وسط",450.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1923,"شراب دوالي كبير",450.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1924,"حامل ذراع",150.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1925,"نايت كالم",35.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1926,"جرانيتريل امبول",64.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1927,"فوليك اسيد",36.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1928,"بيلجيكا قطره",27.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1929,"لاكتيول فورت أكياس",20.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1930,"سيدامكس",22.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1931,"كورنتيرز قطره",41.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1932,"سيبروستام 1 جم أمبول",17.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1933,"هيالو 4 ستارت",550.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1934,"ابيو 4000 فيال",250.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1935,"لوسيفورت 500 مجم",42.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1936,"بوركاسوفت 2 مجم شريط",59.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1937,"كولستين 1 مليون",525.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1938,"ميدودرين شريط",25.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1939,"اليكوس 5 مجم",266.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1940,"ديمافيت شريط",32.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1941,"جيل سونار زجاجه",70.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1942,"دالاسين 300",39.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1943,"روجتامين",100.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1944,"نيت رونج 5 مجم",16.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1945,"اوكاربون شريط",15.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1946,"خلات رصاص زجاجه",15.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1947,"فيبرامايسين شريط",32.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1948,"لوفير شريط",76.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1949,"وان الفا",67.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1950,"اميكاسين فيال",92.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1951,"كالستيرون شريط",60.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1952,"بيكولاس",24.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1953,"كارفيد 6.25 شريط",15.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1954,"انشور",550.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1955,"ديسفلاتيل شريط",18.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1956,"اوكاربون شريط",15.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1957,"البومين فيال",681.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1958,"كوليروز بلس",69.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1959,"بون كير 5. ميكرو شريط",43.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1960,"بون كير 1 ميكرو شريط",45.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1961,"ابيلات ريتارد شريط",11.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1962,"كابوتين 50",24.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1963,"كاردورا",20.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1964,"فيوسيدين مرهم",69.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1965,"ميبو مرهم",109.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1966,"فينادون",37.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1967,"امبوفير",55.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1968,"دالاسين 600",59.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1969,"فنتال بخاخ",72.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1970,"اورسوفالك شريط",61.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1971,"سنجيولير شريط",96.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1972,"انتنال كبسول",26.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1973,"دوفلاك زجاجه",143.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1974,"كال ماج شريط",59.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1975,"بروكورالان شريط",22.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1976,"تاسوزين 4.5",525.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1977,"كتافلام",43.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1978,"اندرال شريط",15.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1979,"بوتاسيوم زجاجه",29.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1980,"ديباكين زجاجه",36.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1981,"جابتين 300 شريط",126.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1982,"ليبانثيل 300 شريط",126.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1983,"الفنترن شريط",43.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1984,"زاكتاجيت",288.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1985,"الدوميت250",37.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1986,"نورفاسك 5 مجم",54.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1987,"نورفاسك 10 مجم",32.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1988,"بريباوست",200.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1989,"فيسرالجين امبول",15.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1990,"بيبراسيلين",465.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1991,"ابى داينيترا",40.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1992,"نيترو ماك شريط",16.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1993,"لاكسومايد محلول",71.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1994,"اميكاسين فيال",90.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1995,"اوروفكس مضمضه",95.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1996,"مارياجون شريط",50.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1997,"ايريوس شريط",59.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1998,"شراب دوالى كبير",500.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[1999,"شراب دوالى وسط",500.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2000,"شراب دوالى صغير",500.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2001,"نايلون 1 راوند",152.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2002,"برولين 2 راوند",65.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2003,"برولين 2 قاطع",65.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2004,"ماسك فينتورى",90.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2005,"سيلكون 3 ش م 24",350.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2006,"قسطره شرجيه م 28",50.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2007,"قسطره شرجيه م 30",50.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2008,"فلانشه م 57",220.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2009,"فلانشه م 70",220.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2010,"كيس فلانشه م 57",220.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2011,"كيس فلانشه م70",220.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2012,"وصله تخدير كبار احادي",850.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2013,"وصله تخدير كبار ثنائى",370.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2014,"انبوبة شق صدر",500.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2015,"جيجلي سو",130.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2016,"وصله غسيل كلوى",170.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2017,"كبسولا",310.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2018,"فلتر غسيل",700.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2019,"فيستولا",70.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2020,"جركن بيكارب",900.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2021,"جركن سيترو",1900.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2022,"اسبيرو ميتر",90.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2023,"تيراتام 500 شريط",74.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2024,"سبتازول شريط",17.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2025,"بروكورالان شريط",22.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2026,"كونكور 5 بلس",24.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2027,"هيموكلار كريم",58.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2028,"فلاجيل 500 شريط",17.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2029,"ميبو سى كريم",95.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2030,"انتينال كبسول",26.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2031,"فنتال بخاخ",72.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2032,"اوروفكس مضمضه",95.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2033,"ثرومبكس كريم",77.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2034,"سيليمارين شريط (مارياجون )",50.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2035,"يورفين فوار",31.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2036,"ايريوس 5 مجم شريط",59.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2037,"سنجيولير 10 مجم شريط",96.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2038,"ديباكين شريط",40.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2039,"تريبتال 300 شريط",71.2,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2040,"ترينتال 400 شريط",64.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2041,"نيت رونج 5 لزقه",16.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2042,"سوفيناسين 5 مجم شريط",47.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2043,"نيو - ميون",1123.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2044,"اورسوفالك 250 مجم شريط",61.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2045,"سبرا برو",79.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2046,"مالتى ريلاكس",21.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2047,"دولبيران 100",30.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2048,"ليفابايون حقن",16.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2049,"بلكوفين 25 مجم شريط",17.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2050,"بروفين 400 شريط",26.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2051,"سولى ميدرول 1جم",1000.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2052,"تافانيك 500 شريط",192.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2053,"افروزوليد 600 شريط",231.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2054,"ميلوباك 25مجم",34.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2055,"موتيليوم 10 مجم",25.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2056,"سوبراكس 400 مجم",159.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2057,"سيدوفاج 500 مجم",11.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2058,"ميلجا 40 شريط",27.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2059,"الكابريس 5 مجم",29.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2060,"ابيزولون ديبو فيال",39.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2061,"سولي ميدرول 500 فيال",500.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2062,"نيو ميون",1123.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2063,"توبرين قطره",23.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2064,"اورسوفالك 250 مجم",61.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2065,"سيليمارين ( مارياجون )",50.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2066,"جاست ريج أمبول",11.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2067,"كونترلوك 40 شريط",188.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2068,"تريتاس 2.5 مجم",27.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2069,"تكساكورت كريم",22.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2070,"ميوكوستا شريط",114.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2071,"تايمر قطره",66.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2072,"نيستاتين نقط",30.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2073,"اكسفورج 160/5",109.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[2074,"هالوبيردول أمبول",13.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,1,""],[2075,"ميرونام 1 جم",553.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[626,"بثدين 1000مجم",9.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,1,""],[627,"فانكوميسين 5. جم",115.8,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[872,"مونوكريل 3/0 قاطع",104.16,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[937,"مونوكريل 4/0 قاطع",99.58,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[938,"مونوكريل 5/0 قاطع",99.58,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[939,"رابيد 2/0 قاطع",75.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[941,"رابيد 3/0 قاطع",75.0,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[942,"سترى باد م10*12",1.75,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""],[943,"شورت مريض",5.5,"غير محدد","علبة / قطعة","غير مدخل",0,10,0,""]];
+const KEY='ops_store_v1',CFGK='ops_cfg_v1',THK='ops_theme';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=n=>(n==null||n==='')?'—':(Math.round(n*100)/100).toLocaleString('en-US');
+const r2=x=>Math.round(x*100)/100;
+const p2=n=>String(n).padStart(2,'0');
+const norm=s=>String(s==null?'':s).toLowerCase().replace(/[ً-ٰٟـ]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/ؤ/g,'و').replace(/ئ/g,'ي').replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).trim();
+const todayStr=()=>{const d=new Date();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())};
+const nowLocal=()=>{const d=new Date();return todayStr()+'T'+p2(d.getHours())+':'+p2(d.getMinutes())};
+const daysTo=e=>Math.round((new Date(e+'T00:00:00')-new Date(todayStr()+'T00:00:00'))/864e5);
+const dFmt=e=>e?e.split('-').reverse().join('/'):'—';
+const dtFmt=t=>{const d=new Date(t);return isNaN(d)?'':d.toLocaleString('en-GB',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:false})};
+const hm=t=>{const d=new Date(t);return isNaN(d)?'':p2(d.getHours())+':'+p2(d.getMinutes())};
+const strip=i=>{const {_s,...r}=i;return r};
+
+/* ---------- الإعدادات المحلية (للجهاز) ---------- */
+function loadCfg(){let s={};try{s=JSON.parse(localStorage.getItem(CFGK)||'{}')}catch(e){}
+  return {url:s.url||GAS_URL,token:s.token||GAS_TOKEN,crit:s.crit||20,warn:s.warn||30,lead:s.lead||7,cover:s.cover||30}}
+let cfg=loadCfg();
+
+/* ---------- البيانات ---------- */
+const toItem=r=>({c:r[0],n:r[1],p:r[2],sh:r[3]==='غير محدد'?'':r[3],u:r[4]||'علبة / قطعة',cq:null,cu:'',b:r[6]||0,r:r[7]==null?10:r[7],mx:0,pk:0,x:r[8]===1,e:r[9]||'',img:''});
+function fixItem(i){i.mx=Number(i.mx)||0;i.pk=Number(i.pk)||0;i.img=i.img||'';i.e=i.e||'';i.sh=i.sh||'';i.cu=i.cu||'';if(i.r==null)i.r=10;return i}
+function load(){
+  try{const s=localStorage.getItem(KEY);if(s){const d=JSON.parse(s);
+    if(d&&Array.isArray(d.items)&&Array.isArray(d.log)){d.items.forEach(fixItem);d.log.forEach(l=>{if(!l.dept&&l.dest)l.dept=l.dest});d.q=Array.isArray(d.q)?d.q:[];d.tpl=Array.isArray(d.tpl)?d.tpl:[];return d}}}catch(e){}
+  return {items:SEED.map(toItem),log:[],q:[],tpl:[]};
+}
+let db=load(),F='all',pages=1,storageWarned=false;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(db,(k,v)=>k==='_s'?undefined:v))}catch(e){if(!storageWarned){storageWarned=true;toast('⚠️ تعذّر الحفظ على هذا المتصفح (الوضع الخاص أو الذاكرة ممتلئة)')}}}
+function prep(){db.items.forEach(it=>{it._s=norm(it.c+' '+it.n)})}
+prep();
+const byC=c=>db.items.find(i=>String(i.c)===String(c));
+
+/* ---------- الصور ---------- */
+function imgSrc(u){
+  u=String(u||'').trim();if(!u)return '';
+  let m=u.match(/drive\.google\.com\/file\/d\/([\w-]+)/)||u.match(/drive\.google\.com\/(?:open|uc)\?[^#]*id=([\w-]+)/);
+  if(m)return 'https://drive.google.com/thumbnail?id='+m[1]+'&sz=w400';
+  return /^(https?:\/\/|data:image\/)/i.test(u)?u:'';
+}
+function thumb(it,cls,zoom){
+  const u=imgSrc(it.img);
+  if(u)return `<img class="th ${cls||''}" src="${esc(u)}" alt="" loading="lazy" ${zoom===false?'':`data-zoom="${it.c}"`}>`;
+  return zoom===false?`<span class="th ph ${cls||''}">📦</span>`:`<button type="button" class="th ph ${cls||''}" data-act="edit" data-c="${it.c}" title="إضافة صورة">📷</button>`;
+}
+document.addEventListener('error',e=>{const t=e.target;if(t&&t.tagName==='IMG'&&t.classList.contains('th')&&!t.id){const s=document.createElement('span');s.className='th ph '+(t.classList.contains('sm')?'sm':'');s.textContent='📦';t.replaceWith(s)}},true);
+
+/* ---------- حالة الصنف والنسبة ---------- */
+function st(it){
+  const rf=it.mx>0?it.mx:(it.pk>0?it.pk:0);
+  const pct=rf?Math.max(0,Math.min(100,it.b/rf*100)):null;
+  let lv='ok',why='';
+  if(it.b<=0)lv='out';
+  else if(pct!=null&&pct<cfg.crit)lv='crit';
+  else if(pct!=null&&pct<cfg.warn){lv='low';why='pct'}
+  else if(it.r>0&&it.b<=it.r){lv='low';why='rp'}
+  const s={lv,why,pct,rf,exp:null,d:null};
+  if(it.e){s.d=daysTo(it.e);if(s.d<0)s.exp='expired';else if(s.d<=NEAR)s.exp='near'}
+  return s;
+}
+function badges(it,s){
+  let h='';
+  if(s.lv==='out')h+='<span class="bd bad">نفد — أعد الطلب فوراً</span>';
+  else if(s.lv==='crit')h+=`<span class="bd bad">أقل من ${cfg.crit}% — إعادة طلب عاجل</span>`;
+  else if(s.lv==='low')h+=`<span class="bd low">${s.why==='pct'?`أقل من ${cfg.warn}% — جهّز طلب`:'وصل لحد الطلب'}</span>`;
+  else h+='<span class="bd ok">طبيعي</span>';
+  if(s.exp==='expired')h+=' <span class="bd bad">منتهي الصلاحية</span>';
+  else if(s.exp==='near')h+=' <span class="bd low">ينتهي خلال '+s.d+' يوم</span>';
+  return h;
+}
+function bar(s){
+  if(s.pct==null)return '<span class="pbs">حدد الحد الأقصى لعرض النسبة</span>';
+  return `<div class="pb ${s.lv}"><i style="width:${s.pct}%"></i><u style="inset-inline-start:${cfg.crit}%"></u><u style="inset-inline-start:${cfg.warn}%"></u></div><span class="pbs ${s.lv}">${Math.round(s.pct)}% متبقي من ${fmt(s.rf)}</span>`;
+}
+
+/* ---------- العرض ---------- */
+function renderStats(){
+  let nar=0,narA=0,reo=0,cO=0,cC=0,cL=0,near=0,expd=0,wb=0;
+  for(const it of db.items){const s=st(it);
+    if(it.b>0)wb++;
+    if(it.x){nar++;if(s.lv!=='ok'||s.exp)narA++}
+    if(s.lv!=='ok')reo++;if(s.lv==='out')cO++;if(s.lv==='crit')cC++;if(s.lv==='low')cL++;
+    if(s.exp==='near')near++;if(s.exp==='expired')expd++}
+  const c=(f,cls,ic,n,t,sub)=>`<button class="card ${cls} ${F===f?'on':''}" data-f="${f}"><span>${ic} ${t}</span><b>${n}</b><small>${sub}</small></button>`;
+  $('#stats').innerHTML=
+    c('all','','📦',db.items.length,'إجمالي الأصناف',wb+' صنف له رصيد')+
+    c('narc','narc','🚨',nar,'الأدوية المخدرة',narA?('⚠ '+narA+' تنبيه'):'لا تنبيهات')+
+    c('reorder','warn','🛒',reo,'تحتاج إعادة طلب',`نفد ${cO} · أقل من ${cfg.crit}%: ${cC} · أقل من ${cfg.warn}%: ${cL}`)+
+    c('near','amber','⏳',near+expd,'قريبة الانتهاء',expd+' منتهي · خلال '+NEAR+' يوم');
+  $('#chipCrit').textContent='🔴 عاجل (أقل من '+cfg.crit+'%)';
+}
+function renderNarc(){
+  const nl=db.items.filter(i=>i.x),P=$('#narcP');
+  if(!nl.length){P.hidden=true;return}
+  P.hidden=false;
+  const al=nl.filter(i=>{const s=st(i);return s.lv!=='ok'||s.exp}).length;
+  P.innerHTML=`<div class="narch"><span>🚨</span><span>الأدوية المخدرة — رعاية خاصة</span>${al?`<span class="bd bad">${al} تنبيه</span>`:''}<small>الصرف يتطلب: القسم + اسم المستلم + الطبيب المسؤول + رقم تذكرة الصرف</small></div>
+  <div class="narcg">${nl.map(i=>{const s=st(i);return `<div class="nc ${s.lv!=='ok'||s.exp?'al':''}"><div class="nmw">${thumb(i,'sm')}<div class="nn">⚠ ${esc(i.n)}</div></div><div class="nb">${fmt(i.b)} <small>${esc(i.u)}</small></div>${bar(s)}<div>${badges(i,s)}</div><button class="mini out" data-act="out" data-c="${i.c}">📤 صرف</button></div>`}).join('')}</div>`;
+}
+function capHtml(it){
+  if(it.cq)return `<span class="cap">📦 1 ${esc((it.u||'علبة').split('/')[0].trim())} = <b>${fmt(it.cq)}</b> ${esc(it.cu)}</span>`;
+  return `<button class="capb" data-act="edit" data-c="${it.c}">غير مدخل ✎</button>`;
+}
+function row(it,s){
+  const balc=s.lv==='out'||s.lv==='crit'?'bad':(s.lv==='low'?'low':'');
+  return `<tr class="${it.x?'narc':''}">
+<td class="cd mut" data-l="الكود">${it.c}</td>
+<td class="nm" data-l="الصنف"><div class="nmw">${thumb(it)}<div class="nt">${it.x?'⚠ ':''}<b>${esc(it.n)}</b>${it.x?'<span class="nxb">🚨 مخدر</span>':''} <span class="mcode">#${it.c}</span></div></div></td>
+<td class="cp" data-l="سعة العلبة / محتوى الوحدة">${capHtml(it)}</td>
+<td data-l="الوحدة">${esc(it.u)}</td>
+<td class="bl" data-l="الرصيد والنسبة المتبقية"><span class="bal ${balc}">${fmt(it.b)}</span>${bar(s)}</td>
+<td data-l="حد الطلب">${fmt(it.r)}</td>
+<td data-l="الرف" class="${it.sh?'':'mut'}">${esc(it.sh||'غير محدد')}</td>
+<td data-l="الانتهاء" class="${it.e?'':'mut'}">${it.e?dFmt(it.e):'—'}</td>
+<td class="stt" data-l="الحالة">${badges(it,s)}</td>
+<td class="ac"><button class="mini out" data-act="out" data-c="${it.c}">صرف</button><button class="mini in" data-act="in" data-c="${it.c}">إضافة</button><button class="mini" data-act="edit" data-c="${it.c}" aria-label="تعديل">✎</button></td></tr>`;
+}
+function view(){
+  const toks=norm($('#q').value).split(/\s+/).filter(Boolean);
+  const l=db.items.map(it=>({it,s:st(it)})).filter(({it,s})=>{
+    if(F==='narc'&&!it.x)return false;
+    if(F==='reorder'&&s.lv==='ok')return false;
+    if(F==='crit'&&s.lv!=='crit'&&s.lv!=='out')return false;
+    if(F==='out'&&s.lv!=='out')return false;
+    if(F==='near'&&!s.exp)return false;
+    for(const t of toks)if(!it._s.includes(t))return false;
+    return true});
+  const so=$('#sort').value;
+  l.sort(so==='n'?(a,b)=>a.it.n.localeCompare(b.it.n,'ar'):
+    so==='b'?(a,b)=>a.it.b-b.it.b||a.it.c-b.it.c:
+    so==='p'?(a,b)=>((a.s.pct==null)-(b.s.pct==null))||((a.s.pct||0)-(b.s.pct||0))||a.it.c-b.it.c:
+    so==='e'?(a,b)=>(a.it.e||'9999').localeCompare(b.it.e||'9999')||a.it.c-b.it.c:
+    (a,b)=>a.it.c-b.it.c);
+  return l;
+}
+function renderList(){
+  const l=view(),n=pages*PAGE,sh=l.slice(0,n);
+  $('#tb').innerHTML=sh.length?sh.map(x=>row(x.it,x.s)).join(''):'<tr><td colspan="10" class="empty">لا توجد أصناف مطابقة</td></tr>';
+  $('#count').textContent=`عرض ${sh.length} من ${l.length} صنف`;
+  const m=$('#more');m.hidden=l.length<=n;m.textContent=`عرض المزيد (باقي ${l.length-n})`;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('on',c.dataset.f===F));
+}
+function renderAll(){renderStats();renderNarc();renderList();names();backupDot();setSt()}
+function names(){
+  const s=new Set();db.log.forEach(l=>{if(l.who)s.add(l.who);if(l.doc)s.add(l.doc)});
+  $('#names').innerHTML=[...s].map(v=>`<option value="${esc(v)}">`).join('');
+}
+function backupDot(){
+  const need=!cfg.url&&db.log.length&&(!db.lb||Date.now()-db.lb>7*864e5);
+  $('#bMore').classList.toggle('dot',!!need);
+  $('#bkNote').textContent=db.lb?('آخر نسخة احتياطية: '+dtFmt(db.lb)):'لم تُؤخذ نسخة احتياطية بعد.';
+  $('#modeNote').textContent=cfg.url?'✅ الوضع الحالي: مرتبط بـ Google Sheets — الشيت هو المرجع الأساسي للبيانات.':'⚠️ الوضع الحالي: محلي — البيانات داخل متصفح هذا الجهاز فقط. اربط الشيت لمشاركتها بين كل الأجهزة.';
+}
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),2800)}
+
+/* ---------- المزامنة مع Google Sheets ---------- */
+let ST={k:'local'},syncing=false,again=false,askedUp=false,askedRep=false,halted=false;
+function setSt(k,msg){
+  if(k)ST={k,msg};
+  const b=$('#sync'),q=db.q.length;let t='';
+  if(!cfg.url)ST={k:'local'};
+  switch(ST.k){
+    case 'local':t='⚪ وضع محلي — اضغط للربط بالشيت';break;
+    case 'busy':t='🔄 جارٍ المزامنة...';break;
+    case 'ok':t='🟢 متزامن'+(db.sat?' '+hm(db.sat):'')+(q?' · '+q+' معلّق':'');break;
+    case 'off':t='🟠 بدون اتصال'+(q?' · '+q+' تعديل معلّق':'');break;
+    default:t='🔴 '+(ST.msg||'خطأ');
+  }
+  b.textContent=t;b.title=ST.msg||'';
+}
+async function api(method,body,qs){
+  const ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),method==='GET'&&qs?60000:30000);
+  try{
+    let res;
+    if(method==='GET')res=await fetch(cfg.url+(cfg.url.includes('?')?'&':'?')+(qs?qs+'&':'')+'token='+encodeURIComponent(cfg.token)+'&_='+Date.now(),{signal:ctl.signal,cache:'no-store'});
+    else res=await fetch(cfg.url,{method:'POST',body:JSON.stringify(Object.assign({token:cfg.token},body)),signal:ctl.signal});
+    let j;try{j=await res.json()}catch(e){throw new Error('رد غير صالح — تأكد أن Web App منشور بصلاحية Anyone وأن الرابط ينتهي بـ /exec')}
+    return j;
+  }catch(e){
+    if(e.name==='AbortError')throw new Error('انتهت مهلة الاتصال');
+    throw e;
+  }finally{clearTimeout(tm)}
+}
+function applySrv(i){
+  i=fixItem(i);const l=byC(i.c);
+  if(l){Object.assign(l,i);l._s=norm(l.c+' '+l.n)}else{i._s=norm(i.c+' '+i.n);db.items.push(i)}
+}
+function enqueue(k,d){if(cfg.url){db.q.push({k,d});save();sync({pull:false})}}
+async function upload(){
+  const r=await api('POST',{action:'import',data:{items:db.items.map(strip),log:db.log}});
+  if(!r.ok)throw new Error(r.error==='unauthorized'?'الرمز السري غير صحيح':(r.error||'فشل الرفع'));
+  toast('تم رفع '+r.added+' صنف و'+r.addedLog+' حركة للشيت');
+}
+async function pull(){
+  const r=await api('GET');
+  if(!r.ok)throw new Error(r.error==='unauthorized'?'الرمز السري غير صحيح':(r.error||'خطأ من الشيت'));
+  if(!r.items.length){
+    if(db.items.length&&!askedUp){askedUp=true;
+      if(confirm('الشيت فارغ. هل ترفع الأصناف والحركات الموجودة على هذا الجهاز ('+db.items.length+' صنف) إلى الشيت الآن؟')){await upload();return pull()}}
+    return;
+  }
+  if(!db.linked&&db.log.length&&!askedRep){askedRep=true;
+    if(!confirm('سيتم استبدال بيانات هذا الجهاز ('+db.log.length+' حركة محلية) ببيانات الشيت. متابعة؟')){halted=true;throw new Error('أُوقفت المزامنة بقرارك')}}
+  db.items=r.items.map(fixItem);db.log=r.log;if(Array.isArray(r.tpl))db.tpl=r.tpl;db.linked=true;prep();save();
+}
+async function sync(o){
+  o=o||{};
+  if(!cfg.url){setSt('local');return}
+  if(halted&&!o.force)return;
+  if(syncing){again=true;return}
+  syncing=true;setSt('busy');
+  try{
+    while(db.q.length){
+      const op=db.q[0];
+      const r=await api('POST',{action:op.k,data:op.d});
+      if(r.ok){if(r.item)applySrv(r.item)}
+      else if(r.error==='unauthorized')throw new Error('الرمز السري غير صحيح');
+      else if(r.error==='insufficient'&&op.k==='moveBatch'){
+        (r.items||[]).forEach(applySrv);
+        const ids=new Set(op.d.moves.map(m=>m.id));db.log=db.log.filter(l=>!ids.has(l.id));
+        alert('⚠️ تم رفض صرف القالب بالكامل لأن الرصيد على الشيت لا يكفي: '+(r.lines||[]).map(l=>l.n+' (المتاح '+fmt(l.balance)+')').join('، ')+'. غالباً صرف منه جهاز آخر قبلك.');
+      }
+      else if(r.error==='insufficient'){
+        if(r.item)applySrv(r.item);
+        db.log=db.log.filter(l=>l.id!==op.d.id);
+        alert('⚠️ تم رفض الصرف: الرصيد المتاح على الشيت '+fmt(r.balance)+' فقط ('+op.d.n+'). غالباً صرف منه جهاز آخر قبلك.');
+      }else alert('تعذّر تنفيذ عملية على الشيت: '+(r.error||''));
+      db.q.shift();save();renderAll();
+    }
+    if(o.pull!==false)await pull();
+    db.sat=Date.now();save();setSt('ok');renderAll();
+  }catch(e){
+    const net=/fetch|network|Load failed|مهلة|رد غير صالح/i.test(String(e.message))||e.name==='TypeError';
+    setSt(net?'off':'err',e.message);
+  }finally{syncing=false;if(again){again=false;setTimeout(()=>sync({pull:false}),60)}}
+}
+$('#sync').onclick=()=>{if(!cfg.url)openSettings();else{halted=false;sync({pull:true,force:true})}};
+setInterval(()=>{if(cfg.url&&!document.hidden)sync({pull:true})},60000);
+window.addEventListener('online',()=>sync({pull:true}));
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&cfg.url)sync({pull:true})});
+
+/* ---------- الفلاتر والأحداث ---------- */
+function setF(f){F=(F===f&&f!=='all')?'all':f;pages=1;renderStats();renderList()}
+document.addEventListener('click',e=>{
+  const f=e.target.closest('[data-f]');if(f){setF(f.dataset.f);return}
+  const z=e.target.closest('[data-zoom]');if(z){openZoom(byC(z.dataset.zoom));return}
+  const a=e.target.closest('[data-act]');
+  if(a){const it=byC(a.dataset.c);if(!it)return;
+    if(a.dataset.act==='edit')openEdit(it);else openMove(a.dataset.act,it);return}
+  if(e.target.closest('[data-close]')){e.target.closest('dialog').close()}
+});
+document.querySelectorAll('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d)d.close()}));
+let qt;$('#q').addEventListener('input',()=>{clearTimeout(qt);qt=setTimeout(()=>{pages=1;renderList()},90)});
+$('#sort').addEventListener('change',()=>{pages=1;renderList()});
+$('#more').addEventListener('click',()=>{pages++;renderList()});
+$('#bNew').onclick=()=>openMove('out');
+$('#bLog').onclick=()=>{renderLog();$('#dL').showModal()};
+$('#bMore').onclick=()=>{backupDot();$('#dT').showModal()};
+let ZI=null;
+function openZoom(it){if(!it)return;ZI=it;$('#zImg').src=imgSrc(it.img);$('#zCap').textContent=it.n;$('#dZ').showModal()}
+$('#zEdit').onclick=()=>{$('#dZ').close();if(ZI)openEdit(ZI)};
+
+/* ---------- الوضع الداكن / الفاتح ---------- */
+function curTheme(){return document.documentElement.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light')}
+try{const t=localStorage.getItem(THK);if(t)document.documentElement.dataset.theme=t}catch(e){}
+$('#bTheme').onclick=()=>{const t=curTheme()==='dark'?'light':'dark';document.documentElement.dataset.theme=t;try{localStorage.setItem(THK,t)}catch(e){}};
+
+/* ---------- نموذج الحركة ---------- */
+let MI=null,MT='out';
+$('#mDept').innerHTML=DEPTS.map((d,i)=>`<option value="${i}">${esc(d)}</option>`).join('');
+$('#ld').innerHTML='<option value="">كل الأقسام</option>'+DEPTS.map(d=>`<option value="${esc(d)}">${esc(d)}</option>`).join('');
+$('#mDept').addEventListener('change',()=>{$('#lFloor').hidden=Number($('#mDept').value)!==FLOOR_DEPT});
+function setType(t){
+  MT=t;$('#fM').dataset.t=t;
+  document.querySelectorAll('#seg button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  $('#lWho').textContent=t==='out'?'اسم المستلم':'اسم المستلم (مستلم المخزون)';
+  $('#lDoc').textContent=t==='out'?'الطبيب المسؤول':'الطبيب / المسؤول (اختياري)';
+  $('#lRef').textContent=t==='out'?(MI&&MI.x?'رقم تذكرة صرف المخدرات (إلزامي)':'رقم الإذن / الروشتة (اختياري)'):'رقم الفاتورة / إذن الإضافة (اختياري)';
+  $('#lFloor').hidden=t!=='out'||Number($('#mDept').value)!==FLOOR_DEPT;
+  $('#mErr').textContent='';
+}
+document.querySelectorAll('#seg button').forEach(b=>b.onclick=()=>{if(b.dataset.t==='tpl'){$('#dM').close();openTplDispense()}else setType(b.dataset.t)});
+function openMove(t,it){
+  $('#fM').reset();$('#mDept').value='0';$('#mTime').value=nowLocal();
+  MI=null;$('#sug').classList.remove('show');
+  if(it)pick(it);else $('#mSel').innerHTML='';
+  setType(t||'out');
+  $('#dM').showModal();
+  setTimeout(()=>(it?$('#mQty'):$('#mItem')).focus(),50);
+}
+function pick(it){
+  MI=it;$('#mItem').value=it.n+' ('+it.c+')';$('#sug').classList.remove('show');
+  const s=st(it);
+  $('#mSel').innerHTML=`<div class="sel ${it.x?'narc':''}">${thumb(it,'',false)}<div style="flex:1"><b>${it.x?'⚠ ':''}${esc(it.n)}</b> <span class="mut">#${it.c}</span><div>الرصيد الحالي: <b>${fmt(it.b)}</b> ${esc(it.u)}${it.cq?` · العلبة = ${fmt(it.cq)} ${esc(it.cu)}`:''}</div>${bar(s)}<div>${badges(it,s)}</div>${it.x?'<div class="w">🚨 دواء مخدر — سجّل القسم والمستلم والطبيب ورقم التذكرة بدقة</div>':''}</div></div>`;
+  setType(MT);
+}
+$('#mItem').addEventListener('input',()=>{
+  MI=null;$('#mSel').innerHTML='';
+  const toks=norm($('#mItem').value).split(/\s+/).filter(Boolean),S=$('#sug');
+  if(!toks.length){S.classList.remove('show');return}
+  const r=db.items.filter(it=>toks.every(t=>it._s.includes(t))).slice(0,8);
+  S.innerHTML=r.length?r.map(it=>`<button type="button" data-pk="${it.c}"><span class="nmw">${thumb(it,'sm',false)}<span class="${it.x?'nx':''}">${it.x?'⚠ ':''}${esc(it.n)}</span></span><span class="mut">#${it.c} · رصيد ${fmt(it.b)}</span></button>`).join(''):'<div class="empty">لا نتائج</div>';
+  S.classList.add('show');
+});
+$('#sug').addEventListener('click',e=>{const b=e.target.closest('[data-pk]');if(b)pick(byC(b.dataset.pk))});
+function merr(m){$('#mErr').textContent=m;return false}
+function mkLog(ty,it,q,b0,b1,note,x){
+  return Object.assign({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),t:new Date().toISOString(),ty,c:it.c,n:it.n,x:it.x,q,b0,b1,dept:'',who:'',doc:'',sup:'',ref:'',note:note||''},x||{});
+}
+$('#fM').addEventListener('submit',e=>{
+  e.preventDefault();
+  const it=MI&&byC(MI.c);if(!it)return merr('اختر الصنف من القائمة أولاً');
+  const q=parseFloat($('#mQty').value);if(!(q>0))return merr('أدخل كمية صحيحة أكبر من صفر');
+  const who=$('#mWho').value.trim(),doc=$('#mDoc').value.trim(),ref=$('#mRef').value.trim();
+  let dept='';
+  if(!who)return merr('اسم المستلم مطلوب');
+  if(MT==='out'){
+    dept=DEPTS[Number($('#mDept').value)];
+    const fl=$('#mFloor').value.trim();if(Number($('#mDept').value)===FLOOR_DEPT&&fl)dept+=' — '+fl;
+    if(!doc)return merr('اسم الطبيب المسؤول مطلوب');
+    if(it.x&&!ref)return merr('رقم تذكرة صرف المخدرات مطلوب');
+    if(q>it.b)return merr('الكمية أكبر من الرصيد المتاح ('+fmt(it.b)+')');
+    if(it.x&&!confirm('تأكيد صرف دواء مخدر:\n'+it.n+'\nالكمية: '+fmt(q)+'\nالقسم: '+dept+'\nالمستلم: '+who+'\nالطبيب: '+doc))return;
+  }
+  const b0=it.b;it.b=r2(MT==='out'?b0-q:b0+q);
+  if(it.b>it.pk)it.pk=it.b;
+  const ex=$('#mExp').value;if(MT==='in'&&ex)it.e=ex;
+  const tv=$('#mTime').value;
+  const entry=mkLog(MT,it,q,b0,it.b,$('#mNote').value.trim(),{t:tv?new Date(tv).toISOString():new Date().toISOString(),dept,who,doc,ref,sup:MT==='in'?$('#mSup').value.trim():''});
+  db.log.push(entry);save();$('#dM').close();renderAll();
+  enqueue('move',Object.assign({exp:MT==='in'?ex:''},entry));
+  toast((MT==='out'?'تم صرف ':'تمت إضافة ')+fmt(q)+' من '+it.n+(MT==='out'?' إلى '+dept:''));
+});
+
+/* ---------- تعديل / صنف جديد ---------- */
+let EI=null;
+function prevImg(){const u=imgSrc($('#eImg').value),p=$('#ePrev');p.hidden=!u;if(u)p.src=u}
+$('#eImg').addEventListener('input',prevImg);
+$('#eNoImg').onclick=()=>{$('#eImg').value='';prevImg()};
+$('#eCam').onclick=()=>$('#eFile').click();
+function shrink(file){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{
+  const k=Math.min(1,180/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.width*k));c.height=Math.max(1,Math.round(im.height*k));
+  c.getContext('2d').drawImage(im,0,0,c.width,c.height);let q=.72,u=c.toDataURL('image/jpeg',q);
+  while(u.length>30000&&q>.3){q-=.1;u=c.toDataURL('image/jpeg',q)}res(u)};im.onerror=rej;im.src=fr.result};fr.onerror=rej;fr.readAsDataURL(file)})}
+$('#eFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;
+  try{$('#eImg').value=await shrink(f);prevImg()}catch(x){$('#eErr').textContent='تعذّر قراءة الصورة'}e.target.value=''};
+function openEdit(it){
+  EI=it||null;$('#fE').reset();$('#eErr').textContent='';
+  $('#eH').textContent=it?'تعديل الصنف':'إضافة صنف جديد';
+  const d=it||{c:Math.max(0,...db.items.map(i=>i.c))+1,n:'',p:'',sh:'',u:'علبة / قطعة',cq:'',cu:'',b:0,r:10,mx:0,x:false,e:'',img:''};
+  $('#eC').value=d.c;$('#eC').readOnly=!!it;$('#eN').value=d.n;$('#eP').value=d.p==null?'':d.p;$('#eU').value=d.u;$('#eSh').value=d.sh;
+  $('#eCq').value=d.cq||'';$('#eCu').value=d.cu||'';$('#eR').value=d.r;$('#eMx').value=d.mx||'';$('#eB').value=d.b;$('#eE').value=d.e||'';$('#eX').checked=!!d.x;
+  $('#eImg').value=d.img||'';prevImg();
+  $('#dT').close();$('#dZ').close();$('#dE').showModal();
+}
+$('#fE').addEventListener('submit',e=>{
+  e.preventDefault();
+  const er=m=>{$('#eErr').textContent=m};
+  const c=parseInt($('#eC').value),n=$('#eN').value.trim();
+  if(!c||!n)return er('الكود واسم الصنف مطلوبان');
+  const ex=EI?byC(EI.c):null;
+  if(!EI&&byC(c))return er('هذا الكود موجود بالفعل');
+  const num=v=>v===''?null:parseFloat(v);
+  const b=num($('#eB').value)||0,r=num($('#eR').value);
+  const img=$('#eImg').value.trim();
+  if(img&&!/^(https?:\/\/|data:image\/)/i.test(img))return er('رابط الصورة يجب أن يبدأ بـ https://');
+  if(img.length>45000)return er('الصورة كبيرة جداً — استخدم رابطاً بدل الرفع');
+  const f={n,p:num($('#eP').value),u:$('#eU').value.trim()||'علبة / قطعة',sh:$('#eSh').value.trim(),cq:num($('#eCq').value),cu:$('#eCu').value.trim(),r:r==null?10:r,mx:num($('#eMx').value)||0,e:$('#eE').value,x:$('#eX').checked,img};
+  if(f.cq&&!f.cu)return er('اكتب نوع المحتوى (أمبول / شريط / قطعة...)');
+  let it=ex,adj=null,setB=false;
+  if(it){const b0=it.b;Object.assign(it,f);
+    if(b!==b0){it.b=b;setB=true;adj=mkLog('adj',it,r2(b-b0),b0,b,'جرد / تصحيح رصيد')}}
+  else{it=Object.assign({c,pk:0},f,{b});db.items.push(it);setB=true;
+    if(b)adj=mkLog('adj',it,b,0,b,'رصيد افتتاحي لصنف جديد')}
+  if(it.b>it.pk)it.pk=it.b;
+  if(adj)db.log.push(adj);
+  it._s=norm(it.c+' '+it.n);
+  save();$('#dE').close();renderAll();
+  enqueue('saveItem',{item:strip(it),setBalance:setB,adj});
+  toast('تم حفظ الصنف');
+});
+
+/* ---------- السجل ---------- */
+function renderLog(){
+  const q=norm($('#lq').value),ty=$('#lt').value,dp=$('#ld').value,T={out:'صرف',in:'إضافة',adj:'جرد/تعديل'};
+  const l=db.log.slice().sort((a,b)=>String(b.t).localeCompare(String(a.t))).filter(x=>{
+    if(ty==='nx'){if(!x.x)return false}else if(ty&&x.ty!==ty)return false;
+    if(dp&&!String(x.dept||'').startsWith(dp))return false;
+    return !q||norm([x.n,x.who,x.doc,x.ref,x.dept,x.sup,x.note].join(' ')).includes(q)}).slice(0,300);
+  $('#lList').innerHTML=l.length?l.map(x=>`<div class="lg ${x.x?'nx':''}"><div class="lt ${x.ty}">${T[x.ty]||esc(x.ty)}</div><div><b>${x.x?'🚨 ':''}${esc(x.n)}</b>
+<div class="ls">الكمية: ${x.ty==='adj'&&x.q>0?'+':''}${fmt(x.q)} · الرصيد ${fmt(x.b0)} ← ${fmt(x.b1)}</div>
+${x.dept?`<div class="ls">القسم: <b>${esc(x.dept)}</b></div>`:''}
+${x.who?`<div class="ls">المستلم: ${esc(x.who)}${x.doc?' · الطبيب: '+esc(x.doc):''}</div>`:''}
+${(x.sup||x.ref||x.note)?`<div class="ls">${[x.sup&&('المورد: '+x.sup),x.ref&&('مرجع: '+x.ref),x.note].filter(Boolean).map(esc).join(' · ')}</div>`:''}</div><time>${dtFmt(x.t)}</time></div>`).join(''):'<div class="empty">لا توجد حركات مسجلة</div>';
+}
+$('#lq').addEventListener('input',renderLog);$('#lt').addEventListener('change',renderLog);$('#ld').addEventListener('change',renderLog);
+
+/* ---------- إعدادات الربط ---------- */
+function openSettings(){
+  $('#dT').close();
+  $('#sUrl').value=cfg.url;$('#sTok').value=cfg.token;$('#sCrit').value=cfg.crit;$('#sWarn').value=cfg.warn;$('#sLead').value=cfg.lead;$('#sCover').value=cfg.cover;
+  $('#sNote').textContent=cfg.url?('الحالة: '+$('#sync').textContent):'لم يتم الربط بعد.';
+  $('#dS').showModal();
+}
+$('#tSet').onclick=openSettings;
+$('#sSave').onclick=async()=>{
+  const url=$('#sUrl').value.trim(),token=$('#sTok').value.trim(),crit=parseInt($('#sCrit').value),warn=parseInt($('#sWarn').value),lead=parseInt($('#sLead').value)||7,cover=parseInt($('#sCover').value)||30;
+  if(url&&!/^https:\/\/script\.google\.com\/.+\/exec/.test(url)&&!confirm('الرابط لا يبدو رابط Web App صحيحاً (يبدأ بـ script.google.com وينتهي بـ /exec). متابعة؟'))return;
+  if(!(crit>=1&&warn<=99&&crit<warn)){$('#sNote').textContent='❌ يجب أن يكون حد العاجل أصغر من حد التحذير (مثال 20 و 30).';return}
+  if(cover<lead){$('#sNote').textContent='❌ مدة التغطية يجب ألا تقل عن مدة التوريد.';return}
+  cfg={url,token,crit,warn,lead,cover};localStorage.setItem(CFGK,JSON.stringify(cfg));
+  halted=false;askedUp=false;askedRep=false;renderAll();
+  if(!url){$('#sNote').textContent='تم الحفظ — الوضع محلي.';return}
+  $('#sNote').textContent='جارٍ اختبار الاتصال...';
+  await sync({pull:true,force:true});
+  $('#sNote').textContent=ST.k==='ok'?'✅ تم الاتصال بنجاح وسُحبت البيانات من الشيت.':'❌ '+$('#sync').textContent+(ST.msg?' — '+ST.msg:'');
+};
+$('#sUp').onclick=async()=>{
+  if(!cfg.url){$('#sNote').textContent='احفظ رابط الـ Web App أولاً.';return}
+  $('#sNote').textContent='جارٍ رفع الأصناف...';
+  try{await upload();await sync({pull:true,force:true});$('#sNote').textContent='✅ تم الرفع والمزامنة.'}
+  catch(e){$('#sNote').textContent='❌ '+e.message}
+};
+
+/* ---------- أدوات: تصدير / نسخ احتياطي ---------- */
+const csv=rows=>'﻿'+rows.map(r=>r.map(v=>{v=v==null?'':String(v);return /[",\n\r]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}).join(',')).join('\r\n');
+function dl(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:type||'text/csv;charset=utf-8'}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},600)}
+$('#tNew').onclick=()=>openEdit(null);
+$('#tExpI').onclick=()=>{dl('المخزن_'+todayStr()+'.csv',csv([['الكود','اسم الصنف','السعر','الرف','الوحدة','سعة العلبة','محتوى الوحدة','الرصيد الحالي','حد الطلب','الحد الأقصى','نسبة المتبقي %','مخدر','تاريخ الانتهاء']].concat(db.items.map(i=>{const s=st(i);return [i.c,i.n,i.p,i.sh,i.u,i.cq,i.cu,i.b,i.r,i.mx||'',s.pct==null?'':Math.round(s.pct),i.x?'نعم':'لا',i.e]}))))};
+$('#tExpL').onclick=()=>{dl('سجل_الحركات_'+todayStr()+'.csv',csv([['التاريخ','النوع','الكود','الصنف','مخدر','الكمية','الرصيد قبل','الرصيد بعد','القسم','المستلم','الطبيب','المورد','المرجع','ملاحظات']].concat(db.log.map(l=>[dtFmt(l.t),{out:'صرف',in:'إضافة',adj:'جرد/تعديل'}[l.ty],l.c,l.n,l.x?'نعم':'لا',l.q,l.b0,l.b1,l.dept,l.who,l.doc,l.sup,l.ref,l.note]))))};
+$('#tBk').onclick=()=>{db.lb=Date.now();save();
+  dl('نسخة_المخزن_'+todayStr()+'.json',JSON.stringify({v:3,items:db.items.map(strip),log:db.log,tpl:db.tpl,lb:db.lb}),'application/json');backupDot();toast('تم تجهيز النسخة الاحتياطية')};
+$('#tRs').onclick=()=>{if(cfg.url){alert('الجهاز مرتبط بالشيت: البيانات محفوظة فيه. الاسترجاع متاح في الوضع المحلي فقط.');return}$('#fRs').click()};
+$('#fRs').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;const rd=new FileReader();
+  rd.onload=()=>{try{const d=JSON.parse(rd.result);
+    if(!Array.isArray(d.items)||!Array.isArray(d.log))throw 0;
+    if(!confirm('سيتم استبدال كل البيانات الحالية ('+db.items.length+' صنف، '+db.log.length+' حركة) بالنسخة المختارة ('+d.items.length+' صنف، '+d.log.length+' حركة). متابعة؟'))return;
+    d.items.forEach(fixItem);d.log.forEach(l=>{if(!l.dept&&l.dest)l.dept=l.dest});
+    db={items:d.items,log:d.log,q:[],tpl:Array.isArray(d.tpl)?d.tpl:[],lb:d.lb};prep();save();renderAll();$('#dT').close();toast('تم استرجاع النسخة الاحتياطية')}
+    catch(x){alert('ملف غير صالح')}};
+  rd.readAsText(f);e.target.value='';
+};
+$('#tReset').onclick=()=>{
+  if(cfg.url){alert('الجهاز مرتبط بالشيت. لمسح البيانات امسحها من الشيت نفسه.');return}
+  if(!confirm('سيتم مسح كل الحركات وإرجاع الأرصدة والتعديلات إلى بيانات ملف الإكسيل الأصلية. هل أنت متأكد؟'))return;
+  if(!confirm('تأكيد أخير: لا يمكن التراجع عن هذا الإجراء.'))return;
+  db={items:SEED.map(toItem),log:[],q:[],tpl:[]};prep();save();renderAll();$('#dT').close();toast('تمت إعادة الضبط');
+};
+
+/* ====================== التقارير ====================== */
+const deptOf=l=>{const d=String(l.dept||'');return DEPTS.find(x=>d.startsWith(x))||d||'غير محدد'};
+const price=i=>Number(i&&i.p)||0;
+const money=n=>Math.round(n).toLocaleString('en-US');
+const opts=(arr,cur)=>arr.map(([v,t])=>`<option value="${esc(v)}" ${String(v)===String(cur)?'selected':''}>${esc(t)}</option>`).join('');
+const R={days:30,dept:'',po:'moved',stale:90,anom:30,month:todayStr().slice(0,7)};
+let RT='cons',rid=0,LC={days:0,rows:[],at:0,err:''},LASTCONS=[];
+const deptSel=cur=>`<option value="">كل الأقسام</option>`+DEPTS.map(d=>`<option ${cur===d?'selected':''}>${esc(d)}</option>`).join('');
+const hint=(t,w)=>`<div class="hint ${w?'warn':''}">${t}</div>`;
+
+async function ensureLog(days){
+  if(LC.days>=days&&LC.at&&Date.now()-LC.at<120000)return LC.rows;
+  const from=new Date(Date.now()-days*864e5).toISOString();
+  let rows=null,err='';
+  if(cfg.url){
+    try{const r=await api('GET',null,'action=log&from='+encodeURIComponent(from));
+      if(!r.ok)throw new Error(r.error||'خطأ');
+      rows=r.log.slice();const ids=new Set(rows.map(x=>x.id));
+      db.log.forEach(l=>{if(!ids.has(l.id)&&l.t>=from)rows.push(l)})}
+    catch(e){err='تعذّر تحميل الحركات من الشيت ('+e.message+') — تُعرض الحركات المحفوظة على هذا الجهاز فقط';rows=null}
+  }
+  if(!rows)rows=db.log.filter(l=>l.t>=from);
+  LC={days,rows,at:err?0:Date.now(),err};return rows;
+}
+
+function calcCons(rows,days,dept){
+  const since=Date.now()-days*864e5,m={},byDept={};
+  rows.forEach(l=>{
+    if(l.ty!=='out'||!(Number(l.q)>0))return;
+    if(new Date(l.t).getTime()<since)return;
+    const it=byC(l.c),d=deptOf(l),q=Number(l.q);
+    const bd=byDept[d]=byDept[d]||{v:0,n:0};bd.v+=q*price(it);bd.n++;
+    if(dept&&d!==dept)return;
+    const e=m[l.c]=m[l.c]||{c:l.c,q:0,n:0,d:{}};e.q+=q;e.n++;e.d[d]=(e.d[d]||0)+q});
+  const list=Object.values(m).map(e=>{
+    const it=byC(e.c);if(!it)return null;
+    const avg=e.q/days,dos=avg>0?it.b/avg:Infinity;
+    const sr=Math.ceil(avg*cfg.lead*1.5),sm=Math.max(sr+1,Math.ceil(avg*cfg.cover));
+    return Object.assign(e,{it,avg,dos,sr,sm})}).filter(Boolean);
+  return {list,byDept};
+}
+
+async function repCons(){
+  const rows=await ensureLog(R.days);
+  const {list,byDept}=calcCons(rows,R.days,R.dept);
+  list.sort((a,b)=>(a.dos-b.dos)||(b.q-a.q));LASTCONS=list;
+  let h=`<div class="rctl noprint"><label>الفترة <select data-r="days">${opts([[30,'آخر 30 يوم'],[60,'آخر 60 يوم'],[90,'آخر 90 يوم']],R.days)}</select></label><label>القسم <select data-r="dept">${deptSel(R.dept)}</select></label></div>`;
+  if(!rows.some(l=>l.ty==='out'))return h+hint('لا توجد حركات صرف مسجلة بعد. سجّل الصرف من زر "حركة جديدة" وستظهر هنا قيمة الصرف لكل قسم ومعدلات الاستهلاك.');
+  const depts=Object.entries(byDept).sort((a,b)=>b[1].v-a[1].v),mxv=Math.max(1,...depts.map(x=>x[1].v));
+  const tot=depts.reduce((a,x)=>a+x[1].v,0),cnt=depts.reduce((a,x)=>a+x[1].n,0);
+  h+=`<div class="kpi"><div>إجمالي قيمة الصرف<b>${money(tot)} ج.م</b></div><div>عدد حركات الصرف<b>${cnt}</b></div><div>أصناف تم صرفها<b>${Object.keys(rows.filter(l=>l.ty==='out').reduce((a,l)=>(a[l.c]=1,a),{})).length}</b></div></div>`;
+  h+=`<h3>💰 قيمة الصرف لكل قسم — آخر ${R.days} يوم</h3>`+depts.map(([d,v])=>`<div class="dbr"><span>${esc(d)}</span><div class="pb"><i style="width:${v.v/mxv*100}%"></i></div><span><b>${money(v.v)}</b> ج.م <small class="mut">· ${v.n} حركة</small></span></div>`).join('');
+  const sug=!R.dept,ch=list.filter(e=>e.n>=2&&(e.it.r!==e.sr||(e.it.mx||0)!==e.sm));
+  h+=`<h3>📈 الاستهلاك ومدة كفاية الرصيد${R.dept?' — '+esc(R.dept):''}</h3>`;
+  if(sug)h+=hint('الاقتراح: <b>حد الطلب</b> = متوسط الصرف اليومي × مدة التوريد ('+cfg.lead+' يوم) × 1.5، و<b>الحد الأقصى</b> = متوسط الصرف اليومي × '+cfg.cover+' يوم تغطية. يمكنك تغيير الرقمين من إعدادات الربط. الاقتراحات تظهر للأصناف التي صُرفت مرتين على الأقل.')+(ch.length?`<button class="btn p noprint" data-apall style="justify-self:start">تطبيق الاقتراحات على ${ch.length} صنف</button>`:'');
+  else h+=hint('اختر "كل الأقسام" لعرض اقتراحات حد الطلب والحد الأقصى (لأنها تعتمد على الاستهلاك الكلي).');
+  h+=`<div class="sc"><table class="rt"><thead><tr><th>الصنف</th><th>المصروف</th><th>متوسط/يوم</th><th>الرصيد</th><th>يكفي</th>${sug?'<th>حد الطلب (حالي ← مقترح)</th><th>الحد الأقصى (حالي ← مقترح)</th><th class="noprint"></th>':''}</tr></thead><tbody>`+
+    list.slice(0,80).map(e=>{const it=e.it,fin=isFinite(e.dos),dos=fin?(e.dos>=1000?'999+':Math.round(e.dos)):'—',cls=e.dos<cfg.lead?'bad':(e.dos<cfg.lead*2?'low':'ok');
+      const sg=!sug?'':(e.n>=2?`<td>${fmt(it.r)} ← <b>${e.sr}</b></td><td>${it.mx?fmt(it.mx):'—'} ← <b>${e.sm}</b></td><td class="noprint"><button class="mini" data-ap="${it.c}">تطبيق</button></td>`:'<td colspan="2" class="mut">بيانات قليلة</td><td class="noprint"></td>');
+      return `<tr class="${it.x?'nx':''}"><td>${it.x?'⚠ ':''}${esc(it.n)}</td><td>${fmt(e.q)}</td><td>${fmt(e.avg)}</td><td>${fmt(it.b)}</td><td><span class="bd ${cls}">${dos}${fin?' يوم':''}</span></td>${sg}</tr>`}).join('')+`</tbody></table></div>`+(list.length>80?hint('يُعرض أول 80 صنفاً (الأقل كفاية أولاً).'):'');
+  return h;
+}
+function applySug(codes){
+  const ch=[];
+  codes.forEach(c=>{const e=LASTCONS.find(x=>String(x.c)===String(c)),it=byC(c);
+    if(!e||!it)return;if(it.r!==e.sr||(it.mx||0)!==e.sm){it.r=e.sr;it.mx=e.sm;ch.push({c:it.c,r:it.r,mx:it.mx})}});
+  if(!ch.length)return;
+  save();renderAll();enqueue('metaBulk',{items:ch});renderReport();toast('تم تحديث حد الطلب والحد الأقصى لـ '+ch.length+' صنف');
+}
+
+async function repPo(){
+  const rows=await ensureLog(90);
+  const cm={};calcCons(rows,90,'').list.forEach(e=>cm[e.c]=e);
+  let l=db.items.map(i=>({it:i,s:st(i)})).filter(x=>x.s.lv!=='ok');
+  const total=l.length;
+  if(R.po==='urgent')l=l.filter(x=>x.s.lv==='out'||x.s.lv==='crit');
+  else if(R.po==='moved')l=l.filter(x=>cm[x.it.c]);
+  const ord={out:0,crit:1,low:2};
+  l.sort((a,b)=>ord[a.s.lv]-ord[b.s.lv]||(b.it.x-a.it.x)||a.it.n.localeCompare(b.it.n,'ar'));
+  let h=`<div class="rctl noprint"><label>عرض <select data-r="po">${opts([['moved','المتحركة فقط (صُرفت خلال 90 يوم)'],['urgent','العاجل فقط (نفد / أقل من '+cfg.crit+'%)'],['all','كل ما يحتاج إعادة طلب']],R.po)}</select></label></div>`;
+  if(!l.length)return h+hint(R.po==='moved'&&total?'لا توجد أصناف متحركة تحتاج طلباً. إن لم تُسجَّل حركات صرف بعد فاختر "كل ما يحتاج إعادة طلب" ('+total+' صنف).':'✅ لا توجد أصناف تحتاج إعادة طلب.');
+  h+=hint('الكمية المقترحة = الحد الأقصى للصنف − الرصيد الحالي. إن لم يُحدد حد أقصى تُقدَّر من متوسط الاستهلاك أو من أعلى رصيد سابق. عدّل الكميات أو ألغِ التحديد قبل الطباعة أو المشاركة.');
+  h+=`<div class="sc"><table class="rt"><thead><tr><th class="noprint"></th><th>الصنف</th><th>الرصيد</th><th>الحالة</th><th>المستهدف</th><th>الكمية المطلوبة</th><th>الوحدة</th><th>السعر</th><th>التكلفة</th></tr></thead><tbody>`+
+    l.slice(0,300).map(({it:i,s})=>{
+      const e=cm[i.c];let tg,src='';
+      if(i.mx>0)tg=i.mx;else if(e){tg=Math.ceil(e.avg*cfg.cover);src='تقديري من الاستهلاك'}else if(i.pk>0){tg=i.pk;src='أعلى رصيد سابق'}else{tg=Math.max(1,(i.r||0)*2);src='تقديري'}
+      const qty=Math.max(1,Math.ceil(tg-i.b)),pr=price(i),lab=s.lv==='out'?'نفد':(s.lv==='crit'?'عاجل':'جهّز');
+      return `<tr data-po="${i.c}" data-p="${pr}" class="${i.x?'nx':''}"><td class="noprint"><input type="checkbox" checked data-pc></td><td>${i.x?'⚠ ':''}${esc(i.n)}${src?` <small class="mut">(${src})</small>`:''}</td><td>${fmt(i.b)}</td><td><span class="bd ${s.lv==='low'?'low':'bad'}">${lab}</span></td><td>${fmt(tg)}</td><td><input type="number" min="0" step="any" value="${qty}" data-pq></td><td>${esc(String(i.u).split('/')[0].trim())}</td><td>${pr?fmt(pr):'—'}</td><td data-pl>${money(qty*pr)}</td></tr>`}).join('')+`</tbody></table></div>`;
+  if(l.length>300)h+=hint('يُعرض أول 300 صنف من '+l.length+' (الأكثر استعجالاً أولاً).',true);
+  h+=`<div class="kpi" id="poTot"></div><div class="rctl noprint"><button class="btn" data-poshare>📲 مشاركة (واتساب)</button><button class="btn" data-pocopy>📋 نسخ النص</button></div>`;
+  return h;
+}
+function poTotals(){
+  let n=0,t=0;
+  document.querySelectorAll('#rBody tr[data-po]').forEach(tr=>{
+    const c=tr.querySelector('[data-pc]').checked,q=parseFloat(tr.querySelector('[data-pq]').value)||0,v=q*(Number(tr.dataset.p)||0);
+    tr.querySelector('[data-pl]').textContent=money(v);if(c&&q>0){n++;t+=v}});
+  const k=$('#poTot');if(k)k.innerHTML=`<div>أصناف مختارة<b>${n}</b></div><div>إجمالي التكلفة التقديرية<b>${money(t)} ج.م</b></div>`;
+}
+function poText(){
+  const L=['طلب شراء — المخزن الرئيسي للمستشفى — '+dFmt(todayStr()),''];let n=0;
+  document.querySelectorAll('#rBody tr[data-po]').forEach(tr=>{
+    const c=tr.querySelector('[data-pc]').checked,q=parseFloat(tr.querySelector('[data-pq]').value),it=byC(tr.dataset.po);
+    if(c&&q>0&&it){n++;L.push(n+'. '+it.n+' — '+fmt(q)+' '+String(it.u).split('/')[0].trim())}});
+  return n?L.join('\n'):'';
+}
+
+function calcNarc(rows,from,to){
+  const all=rows.map(l=>Object.assign({},l,{ts:new Date(l.t).getTime()})).filter(l=>l.ts>=from).sort((a,b)=>a.ts-b.ts);
+  return db.items.filter(i=>i.x).map(it=>{
+    const mv=all.filter(l=>String(l.c)===String(it.c)),inM=mv.filter(l=>l.ts<to);
+    const r={it,opening:mv.length?mv[0].b0:it.b,in:0,out:0,adj:0,outs:[]};
+    inM.forEach(l=>{if(l.ty==='in')r.in+=l.q;else if(l.ty==='out'){r.out+=l.q;r.outs.push(l)}else r.adj+=l.q});
+    r.closing=inM.length?inM[inM.length-1].b1:r.opening;
+    r.ok=Math.abs(r.opening+r.in-r.out+r.adj-r.closing)<1e-6&&(to<=Date.now()||Math.abs(r.closing-it.b)<1e-6);
+    r.in=r2(r.in);r.out=r2(r.out);r.adj=r2(r.adj);return r});
+}
+async function repNarc(){
+  const [y,m]=R.month.split('-').map(Number);
+  const from=new Date(y,m-1,1).getTime(),to=new Date(y,m,1).getTime();
+  const rows=await ensureLog(Math.max(2,Math.ceil((Date.now()-from)/864e5)+2));
+  const lines=calcNarc(rows,from,to);
+  let h=`<div class="rctl noprint"><label>الشهر <input type="month" data-r="month" value="${esc(R.month)}"></label></div>`;
+  if(!lines.length)return h+hint('لا توجد أصناف معلّمة كمخدرة. فعّل علامة "دواء مخدر" من تعديل الصنف.');
+  h+=`<h3>🚨 كشف حركة الأدوية المخدرة — ${p2(m)}/${y}</h3><div class="sc"><table class="rt"><thead><tr><th>الصنف</th><th>رصيد أول الشهر</th><th>الوارد</th><th>المنصرف</th><th>تسويات الجرد</th><th>رصيد آخر الشهر</th><th>مطابقة</th></tr></thead><tbody>`+
+    lines.map(r=>`<tr class="nx"><td>⚠ ${esc(r.it.n)}</td><td>${fmt(r.opening)}</td><td>${fmt(r.in)}</td><td>${fmt(r.out)}</td><td>${r.adj>0?'+':''}${fmt(r.adj)}</td><td><b>${fmt(r.closing)}</b></td><td>${r.ok?'✔':'<span class="bd bad">فرق — راجع</span>'}</td></tr>`).join('')+`</tbody></table></div>`;
+  if(lines.some(r=>!r.ok))h+=hint('⚠️ "فرق — راجع" يعني أن الرصيد لا يتطابق مع الحركات المسجلة، غالباً بسبب تعديل مباشر في الشيت خارج الصفحة.',true);
+  const outs=lines.flatMap(r=>r.outs).sort((a,b)=>a.ts-b.ts);
+  h+=`<h3>تفاصيل المنصرف (${outs.length} صرفة)</h3>`+(outs.length?`<div class="sc"><table class="rt"><thead><tr><th>التاريخ</th><th>الصنف</th><th>الكمية</th><th>القسم</th><th>المستلم</th><th>الطبيب</th><th>رقم التذكرة</th></tr></thead><tbody>`+
+    outs.map(l=>`<tr><td>${dtFmt(l.ts)}</td><td>${esc(l.n)}</td><td>${fmt(l.q)}</td><td>${esc(l.dept||'—')}</td><td>${esc(l.who||'—')}</td><td>${esc(l.doc||'—')}</td><td>${esc(l.ref||'—')}</td></tr>`).join('')+`</tbody></table></div>`:hint('لا يوجد صرف مخدرات في هذا الشهر.'));
+  return h;
+}
+
+async function repStale(){
+  const rows=await ensureLog(Math.max(R.stale,90));
+  const outTs={};let first=Infinity;
+  rows.forEach(l=>{const ts=new Date(l.t).getTime();if(ts<first)first=ts;if(l.ty==='out'&&(!outTs[l.c]||ts>outTs[l.c]))outTs[l.c]=ts});
+  const since=Date.now()-R.stale*864e5,cm={};calcCons(rows,90,'').list.forEach(e=>cm[e.c]=e);
+  const near=db.items.map(i=>({it:i,s:st(i)})).filter(x=>x.s.exp).sort((a,b)=>a.s.d-b.s.d);
+  const stale=db.items.filter(i=>i.b>0&&!(outTs[i.c]>=since)).map(i=>({it:i,v:i.b*price(i)})).sort((a,b)=>b.v-a.v||b.it.b-a.it.b);
+  let h=`<div class="rctl noprint"><label>الراكد = بدون صرف منذ <select data-r="stale">${opts([[60,'60 يوم'],[90,'90 يوم'],[180,'180 يوم']],R.stale)}</select></label></div>`;
+  h+=`<h3>⏳ قريبة الانتهاء / منتهية (${near.length})</h3>`;
+  h+=near.length?`<div class="sc"><table class="rt"><thead><tr><th>الصنف</th><th>الانتهاء</th><th>المتبقي</th><th>الرصيد</th><th>القيمة المعرّضة</th><th>الأكثر استخداماً في (لإعادة التوزيع)</th></tr></thead><tbody>`+
+    near.map(({it,s})=>{const e=cm[it.c],top=e?Object.entries(e.d).sort((a,b)=>b[1]-a[1]).slice(0,2).map(x=>x[0]).join('، '):'—';
+      return `<tr class="${it.x?'nx':''}"><td>${it.x?'⚠ ':''}${esc(it.n)}</td><td>${dFmt(it.e)}</td><td><span class="bd ${s.exp==='expired'?'bad':'low'}">${s.exp==='expired'?'منتهي':s.d+' يوم'}</span></td><td>${fmt(it.b)}</td><td>${money(it.b*price(it))} ج.م</td><td>${esc(top)}</td></tr>`}).join('')+`</tbody></table></div>`
+    :hint('✅ لا توجد أصناف قريبة الانتهاء. (تعتمد هذه القائمة على تاريخ الانتهاء المسجل لكل صنف.)');
+  const sv=stale.reduce((a,x)=>a+x.v,0);
+  h+=`<h3>🧊 الأصناف الراكدة (${stale.length})</h3>`;
+  if(first>since)h+=hint(rows.length?'أقدم حركة مسجلة بتاريخ '+dtFmt(first)+' وهي أحدث من الفترة المختارة، فقد تظهر أصناف كراكدة لمجرد أن التسجيل بدأ حديثاً.':'لا توجد حركات مسجلة بعد، لذلك تظهر كل الأصناف ذات الرصيد كراكدة.',true);
+  h+=stale.length?`<div class="kpi"><div>قيمة المخزون الراكد<b>${money(sv)} ج.م</b></div></div><div class="sc"><table class="rt"><thead><tr><th>الصنف</th><th>الرصيد</th><th>القيمة</th><th>آخر صرف</th></tr></thead><tbody>`+
+    stale.slice(0,150).map(({it,v})=>`<tr class="${it.x?'nx':''}"><td>${it.x?'⚠ ':''}${esc(it.n)}</td><td>${fmt(it.b)}</td><td>${money(v)} ج.م</td><td>${outTs[it.c]?dtFmt(outTs[it.c]):'لا يوجد'}</td></tr>`).join('')+`</tbody></table></div>`+(stale.length>150?hint('يُعرض أول 150 صنفاً (الأعلى قيمة).'):''):hint('✅ لا توجد أصناف راكدة.');
+  return h;
+}
+
+function calcAnom(rows,days){
+  const now=Date.now(),DAY=864e5,from=now-days*DAY;
+  const all=rows.map(l=>Object.assign({},l,{ts:new Date(l.t).getTime()})).filter(l=>!isNaN(l.ts)).sort((a,b)=>a.ts-b.ts);
+  const out=all.filter(l=>l.ty==='out'&&l.q>0),res=[],seen=new Set();
+  const sum=a=>a.reduce((s,l)=>s+l.q,0);
+  const push=(l,o)=>{const k=l.ts+'|'+l.c+'|'+o.why;if(seen.has(k))return;seen.add(k);res.push(Object.assign({ts:l.ts,c:l.c,n:l.n,x:l.x,dept:deptOf(l),who:l.who,doc:l.doc,q:l.q},o))};
+  const byItem={};out.forEach(l=>(byItem[l.c]=byItem[l.c]||[]).push(l));
+  for(const c in byItem){const arr=byItem[c];
+    arr.forEach((l,i)=>{
+      if(l.ts<from)return;
+      const prev=arr.filter((p,j)=>j!==i&&p.ts<l.ts&&p.ts>=l.ts-90*DAY).map(p=>p.q);
+      if(prev.length>=4){const m=prev.reduce((a,b)=>a+b,0)/prev.length,sd=Math.sqrt(prev.reduce((a,b)=>a+(b-m)*(b-m),0)/prev.length);
+        if(l.q>m+3*sd&&l.q>=2*m)push(l,{why:'كمية أكبر من المعتاد (المتوسط '+fmt(m)+')',sev:2})}
+      const dup=arr.find((p,j)=>j<i&&l.ts-p.ts<=15*60000&&deptOf(p)===deptOf(l)&&norm(p.who)===norm(l.who)&&p.q===l.q);
+      if(dup)push(l,{why:'تكرار محتمل: نفس الصنف والقسم والمستلم والكمية خلال 15 دقيقة',sev:2});
+    })}
+  const w0=now-7*DAY,h0=w0-56*DAY,g={};
+  out.forEach(l=>{const k=deptOf(l)+'|'+l.c;(g[k]=g[k]||[]).push(l)});
+  for(const k in g){const a=g[k],cur=a.filter(l=>l.ts>=w0),hist=a.filter(l=>l.ts>=h0&&l.ts<w0);
+    if(!cur.length||hist.length<3)continue;
+    const s7=sum(cur),avg=sum(hist)/8;
+    if(s7>2.5*avg&&s7-avg>=2)push(cur[cur.length-1],{q:s7,who:'',doc:'',why:'صرف القسم هذا الأسبوع '+fmt(s7)+' مقابل متوسط أسبوعي '+fmt(avg),sev:2})}
+  const nar=out.filter(l=>l.x&&l.ts>=from-DAY),bd={},br={};
+  nar.forEach(l=>{const kd=norm(l.doc),kr=l.c+'|'+norm(l.who);if(kd)(bd[kd]=bd[kd]||[]).push(l);if(norm(l.who))(br[kr]=br[kr]||[]).push(l)});
+  for(const k in bd){const a=bd[k];a.forEach(l=>{if(l.ts<from)return;const w=a.filter(p=>p.ts<=l.ts&&p.ts>l.ts-DAY);
+    if(w.length>=3)push(l,{why:w.length+' صرفات مخدرة خلال 24 ساعة لنفس الطبيب',sev:3})})}
+  for(const k in br){const a=br[k];a.forEach(l=>{if(l.ts<from)return;const w=a.filter(p=>p.ts<=l.ts&&p.ts>l.ts-DAY);
+    if(w.length>=2)push(l,{why:'نفس المخدر لنفس المستلم '+w.length+' مرات خلال 24 ساعة',sev:3})})}
+  all.filter(l=>l.ty==='adj'&&l.ts>=from&&l.q<0).forEach(l=>push(l,{dept:'',why:'تصحيح رصيد بالنقص ('+fmt(l.q)+')'+(l.note?' — '+l.note:''),sev:l.x?3:(Math.abs(l.q)>=0.2*l.b0?2:1)}));
+  return res.sort((a,b)=>b.sev-a.sev||b.ts-a.ts);
+}
+async function repAnom(){
+  const rows=await ensureLog(R.anom+90),list=calcAnom(rows,R.anom);
+  let h=`<div class="rctl noprint"><label>الفترة <select data-r="anom">${opts([[7,'آخر 7 أيام'],[30,'آخر 30 يوم'],[60,'آخر 60 يوم']],R.anom)}</select></label></div>`;
+  h+=hint('هذه <b>إشارات للمراجعة</b> وليست اتهاماً: كمية أكبر من المعتاد، قفزة في صرف قسم، تكرار محتمل، تجمّع صرفات مخدرة، ونقص في الجرد. راجع الحركة الأصلية قبل أي استنتاج.');
+  if(!list.length)return h+hint('✅ لا توجد إشارات غير معتادة في هذه الفترة (أو أن عدد الحركات المسجلة ما زال قليلاً للمقارنة).');
+  h+=`<div class="sc"><table class="rt"><thead><tr><th></th><th>التاريخ</th><th>الصنف</th><th>القسم</th><th>المستلم</th><th>الطبيب</th><th>الكمية</th><th>السبب</th></tr></thead><tbody>`+
+    list.slice(0,200).map(a=>`<tr class="${a.x?'nx':''}"><td>${a.sev>=3?'🔴':a.sev===2?'🟠':'⚪'}</td><td>${dtFmt(a.ts)}</td><td>${a.x?'⚠ ':''}${esc(a.n)}</td><td>${esc(a.dept||'—')}</td><td>${esc(a.who||'—')}</td><td>${esc(a.doc||'—')}</td><td>${a.q==null?'—':fmt(a.q)}</td><td>${esc(a.why)}</td></tr>`).join('')+`</tbody></table></div>`;
+  return h;
+}
+
+async function renderReport(){
+  const my=++rid,b=$('#rBody');
+  document.querySelectorAll('#rTabs .tab').forEach(t=>t.classList.toggle('on',t.dataset.rt===RT));
+  b.innerHTML='<div class="empty">جارٍ تحميل الحركات...</div>';
+  let h;
+  try{h=await ({cons:repCons,po:repPo,narc:repNarc,stale:repStale,anom:repAnom})[RT]()}
+  catch(e){h='<div class="empty">تعذّر إنشاء التقرير: '+esc(e.message)+'</div>'}
+  if(my!==rid)return;
+  b.innerHTML=(LC.err?`<div class="hint warn noprint">${esc(LC.err)}</div>`:'')+h;
+  if(RT==='po')poTotals();
+}
+$('#bRep').onclick=()=>{$('#dR').showModal();renderReport()};
+$('#rTabs').addEventListener('click',e=>{const t=e.target.closest('[data-rt]');if(t){RT=t.dataset.rt;renderReport()}});
+$('#rBody').addEventListener('change',e=>{
+  const k=e.target.dataset.r;
+  if(k){R[k]=['days','stale','anom'].includes(k)?Number(e.target.value):e.target.value;renderReport();return}
+  if(e.target.matches('[data-pc],[data-pq]'))poTotals();
+});
+$('#rBody').addEventListener('input',e=>{if(e.target.matches('[data-pq]'))poTotals()});
+$('#rBody').addEventListener('click',e=>{
+  const a=e.target.closest('[data-ap]');if(a){applySug([a.dataset.ap]);return}
+  if(e.target.closest('[data-apall]')){
+    const ch=LASTCONS.filter(x=>x.n>=2&&(x.it.r!==x.sr||(x.it.mx||0)!==x.sm));
+    if(ch.length&&confirm('سيتم تغيير حد الطلب والحد الأقصى لـ '+ch.length+' صنف حسب الاستهلاك. متابعة؟'))applySug(ch.map(x=>x.c));return}
+  if(e.target.closest('[data-poshare]')){const t=poText();if(!t){toast('لا توجد أصناف مختارة');return}
+    if(navigator.share)navigator.share({text:t}).catch(()=>{});else window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank');return}
+  if(e.target.closest('[data-pocopy]')){const t=poText();if(!t){toast('لا توجد أصناف مختارة');return}
+    (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('تم نسخ قائمة الطلب'),()=>prompt('انسخ النص:',t))}
+});
+$('#rPrint').onclick=()=>{
+  const T={cons:'تقرير استهلاك الأقسام',po:'قائمة طلب شراء',narc:'كشف حركة الأدوية المخدرة — '+R.month,stale:'تقرير الأصناف الراكدة وقريبة الانتهاء',anom:'تقرير مراجعة الصرف'}[RT];
+  const c=$('#rBody').cloneNode(true);
+  c.querySelectorAll('input[type=number]').forEach(i=>{const s=document.createElement('span');s.textContent=i.value;i.replaceWith(s)});
+  c.querySelectorAll('tr[data-po]').forEach(tr=>{const cb=tr.querySelector('[data-pc]');if(cb&&!cb.checked)tr.remove()});
+  c.querySelectorAll('.noprint').forEach(n=>n.remove());
+  $('#printArea').innerHTML='<h2>🏥 المخزن الرئيسي للمستشفى</h2><h3>'+esc(T)+'</h3><div>تاريخ الطباعة: '+dFmt(todayStr())+'</div>'+c.innerHTML+'<div class="sg"><div>أمين المخزن<br><br>................</div><div>رئيس القسم / الصيدلية<br><br>................</div><div>مدير المستشفى<br><br>................</div></div>';
+  document.body.classList.add('printing');
+  setTimeout(()=>{try{window.print()}finally{document.body.classList.remove('printing')}},60);
+};
+
+/* ====================== قوالب الصرف ====================== */
+const tplById=id=>db.tpl.find(t=>t.id===id);
+let KL=[],TE=null;
+function kStat(l){const it=byC(l.c);return l.q<=0?'':(it&&l.q>it.b?'<span class="bd bad">غير كافٍ</span>':'<span class="bd ok">✔</span>')}
+function drawK(){
+  $('#kLines').innerHTML=`<table class="rt"><thead><tr><th>الصنف</th><th>الكمية</th><th>الرصيد</th><th></th></tr></thead><tbody>`+KL.map((l,i)=>{
+    const it=byC(l.c);if(!it)return `<tr><td colspan="4" class="mut">صنف محذوف (#${l.c})</td></tr>`;
+    return `<tr><td>${esc(it.n)}</td><td><input type="number" min="0" step="any" value="${l.q}" data-kq="${i}"></td><td>${fmt(it.b)}</td><td>${kStat(l)}</td></tr>`}).join('')+`</tbody></table>`;
+}
+function renderK(){const t=tplById($('#kTpl').value);KL=t?t.items.map(i=>({c:i.c,q:i.q})):[];drawK()}
+function openTplDispense(){
+  if(!db.tpl.length){toast('لا توجد قوالب بعد — أنشئ قالباً أولاً');openTplMgr();return}
+  $('#kTpl').innerHTML=db.tpl.map(t=>`<option value="${esc(t.id)}">${esc(t.n)} (${t.items.length} صنف)</option>`).join('');
+  $('#kDept').innerHTML=DEPTS.map((d,i)=>`<option value="${i}">${esc(d)}</option>`).join('');
+  ['kWho','kDoc','kFloor','kNote'].forEach(i=>{$('#'+i).value=''});
+  $('#kTime').value=nowLocal();$('#kErr').textContent='';$('#kFloorL').hidden=true;
+  renderK();$('#dK').showModal();
+}
+$('#kTpl').addEventListener('change',renderK);
+$('#kDept').addEventListener('change',()=>{$('#kFloorL').hidden=Number($('#kDept').value)!==FLOOR_DEPT});
+$('#kLines').addEventListener('input',e=>{
+  const i=e.target.dataset.kq;if(i===undefined)return;
+  KL[i].q=parseFloat(e.target.value)||0;e.target.closest('tr').lastElementChild.innerHTML=kStat(KL[i]);
+});
+$('#fK').addEventListener('submit',e=>{
+  e.preventDefault();const er=m=>{$('#kErr').textContent=m};
+  const t=tplById($('#kTpl').value);if(!t)return er('اختر قالباً');
+  const who=$('#kWho').value.trim(),doc=$('#kDoc').value.trim();
+  if(!who)return er('اسم المستلم مطلوب');if(!doc)return er('اسم الطبيب المسؤول مطلوب');
+  let dept=DEPTS[Number($('#kDept').value)];const fl=$('#kFloor').value.trim();
+  if(Number($('#kDept').value)===FLOOR_DEPT&&fl)dept+=' — '+fl;
+  const lines=KL.filter(l=>l.q>0);if(!lines.length)return er('كل الكميات صفر');
+  const lack=lines.filter(l=>{const it=byC(l.c);return !it||l.q>it.b});
+  if(lack.length)return er('الرصيد لا يكفي: '+lack.map(l=>{const it=byC(l.c);return it?it.n+' (المتاح '+fmt(it.b)+')':'#'+l.c}).join('، '));
+  if(lines.some(l=>byC(l.c).x))return er('القالب يحتوي مخدراً — المخدرات تُصرف منفردة بتذكرة');
+  const tv=$('#kTime').value,ts=tv?new Date(tv).toISOString():new Date().toISOString(),entries=[];
+  lines.forEach(l=>{const it=byC(l.c),b0=it.b;it.b=r2(b0-l.q);
+    entries.push(mkLog('out',it,l.q,b0,it.b,('قالب: '+t.n+' '+$('#kNote').value).trim(),{t:ts,dept,who,doc}))});
+  entries.forEach(x=>db.log.push(x));save();$('#dK').close();renderAll();
+  enqueue('moveBatch',{moves:entries});
+  toast('تم صرف قالب "'+t.n+'" ('+lines.length+' صنف) إلى '+dept);
+});
+function openTplMgr(){$('#dK').close();TE=null;renderQ();$('#dQ').showModal()}
+$('#kMgr').onclick=openTplMgr;
+function drawQLines(){
+  $('#qLines').innerHTML=TE.items.length?`<table class="rt"><thead><tr><th>الصنف</th><th>الكمية</th><th></th></tr></thead><tbody>`+TE.items.map((l,i)=>{
+    const it=byC(l.c);return `<tr><td>${it?esc(it.n):'#'+l.c}</td><td><input type="number" min="0" step="any" value="${l.q}" data-ql="${i}"></td><td><button type="button" class="mini out" data-qr="${i}">✕</button></td></tr>`}).join('')+`</tbody></table>`:hint('لم تُضف أصنافاً بعد. ابحث أعلاه وأضف الأصناف التي تُصرف عادةً مع هذا النوع من العمليات.');
+}
+function renderQ(){
+  const ed=!!TE;$('#qEd').hidden=!ed;$('#qList').hidden=ed;
+  if(ed){$('#qName').value=TE.n;$('#qErr').textContent='';$('#qItem').value='';$('#qSug').classList.remove('show');$('#qItem').placeholder='ابحث بالاسم أو الكود (المخدرات لا تُضاف — تُصرف منفردة بتذكرة)';drawQLines();return}
+  $('#qList').innerHTML=(db.tpl.length?db.tpl.map(t=>`<div class="lg" style="grid-template-columns:1fr auto"><div><b>${esc(t.n)}</b><div class="ls">${t.items.length} صنف</div></div><div class="imgrow"><button type="button" class="mini in" data-tu="${esc(t.id)}">استخدام</button><button type="button" class="mini" data-te="${esc(t.id)}">✎</button><button type="button" class="mini out" data-td="${esc(t.id)}">🗑</button></div></div>`).join(''):'<div class="empty">لا توجد قوالب بعد</div>')+'<button class="btn p" id="qNew" type="button">＋ قالب جديد</button>';
+}
+$('#qList').addEventListener('click',e=>{
+  if(e.target.closest('#qNew')){TE={id:'T'+Date.now().toString(36),n:'',items:[]};renderQ();return}
+  const u=e.target.closest('[data-tu]');if(u){$('#dQ').close();openTplDispense();$('#kTpl').value=u.dataset.tu;renderK();return}
+  const ed=e.target.closest('[data-te]');if(ed){const t=tplById(ed.dataset.te);if(t){TE={id:t.id,n:t.n,items:t.items.map(i=>({c:i.c,q:i.q}))};renderQ()}return}
+  const d=e.target.closest('[data-td]');if(d){const t=tplById(d.dataset.td);
+    if(t&&confirm('حذف القالب "'+t.n+'"؟')){db.tpl=db.tpl.filter(x=>x.id!==t.id);save();enqueue('delTpl',{id:t.id});renderQ()}}
+});
+$('#qLines').addEventListener('input',e=>{const i=e.target.dataset.ql;if(i!==undefined)TE.items[i].q=parseFloat(e.target.value)||0});
+$('#qLines').addEventListener('click',e=>{const r=e.target.closest('[data-qr]');if(r){TE.items.splice(Number(r.dataset.qr),1);drawQLines()}});
+$('#qItem').addEventListener('input',()=>{
+  const toks=norm($('#qItem').value).split(/\s+/).filter(Boolean),S=$('#qSug');
+  if(!toks.length){S.classList.remove('show');return}
+  const r=db.items.filter(it=>!it.x&&toks.every(t=>it._s.includes(t))).slice(0,8);
+  S.innerHTML=r.length?r.map(it=>`<button type="button" data-qp="${it.c}"><span>${esc(it.n)}</span><span class="mut">#${it.c}</span></button>`).join(''):'<div class="empty">لا نتائج</div>';
+  S.classList.add('show');
+});
+$('#qSug').addEventListener('click',e=>{
+  const b=e.target.closest('[data-qp]');if(!b)return;const c=Number(b.dataset.qp);
+  if(!TE.items.some(i=>i.c===c))TE.items.push({c,q:1});
+  $('#qItem').value='';$('#qSug').classList.remove('show');drawQLines();
+});
+$('#qBack').onclick=()=>{TE=null;renderQ()};
+$('#qSave').onclick=()=>{
+  const n=$('#qName').value.trim(),qe=m=>{$('#qErr').textContent=m};
+  if(!n)return qe('اكتب اسم القالب');
+  const items=TE.items.filter(i=>i.q>0);if(!items.length)return qe('أضف صنفاً واحداً على الأقل بكمية أكبر من صفر');
+  const t={id:TE.id,n,items},i=db.tpl.findIndex(x=>x.id===t.id);
+  if(i>=0)db.tpl[i]=t;else db.tpl.push(t);
+  save();enqueue('saveTpl',t);TE=null;renderQ();toast('تم حفظ القالب');
+};
+
+$('#today').textContent=new Date().toLocaleDateString('ar-EG-u-nu-latn',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+renderAll();
+if(cfg.url)sync({pull:true});
+</script>
+</body>
+</html>
